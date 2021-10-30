@@ -187,6 +187,18 @@
         </div>
 
 
+        <div class="submenu" id="services">
+            <ul class="submenu-list" data-parent-element="#users"> 
+                <li>
+                    <a href="{{ route("services.all") }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
+                        Manage Services
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+
         <div class="submenu" id="app">
             <ul class="submenu-list" data-parent-element="#app"> 
                 <li>

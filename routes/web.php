@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\VehicleTypesController;
+
+
 // use App\Http\Controllers\VehicleTypes
 
 /*
@@ -58,20 +62,32 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/invoices/generate', [InvoiceController::class, 'create'])->name("invoice.generate");
     
     Route::post('/invoices/generate', [InvoiceController::class, 'store']);
-
+   
     // Vehicle Types
     Route::get("/vehicle_types", [vehicleTypesController::class, 'index'])->name("vehicleTypes.all");
     
-    Route::post('/vehicle_types/store', [vehicleTypesController::class, "store"])->name("vehicleTypes.store");
+    Route::post('/vehicle_types/store', [VehicleTypesController::class, "store"])->name("vehicleTypes.store");
 
-    Route::get('/vehicle_types/{type}/edit', [vehicleTypesController::class, "edit"])->name("vehicleTypes.edit");
+    Route::get('/vehicle_types/{type}/edit', [VehicleTypesController::class, "edit"])->name("vehicleTypes.edit");
     
-    Route::put('/vehicle_types/{id}', [vehicleTypesController::class, "update"])->name("vehicleTypes");
+    Route::put('/vehicle_types/{id}', [VehicleTypesController::class, "update"])->name("vehicleTypes");
     
-    Route::delete('/vehicle_types/{type}', [vehicleTypesController::class, "destroy"]);
+    Route::delete('/vehicle_types/{type}', [VehicleTypesController::class, "destroy"]);
 
+    // Services
 
+    Route::get("/services/components", [ServicesController::class, 'index'])->name("services.all");
+    
+    Route::post('/services/store', [ServicesController::class, "store"])->name("services.store");
 
+    Route::get('/services/{service}/edit', [ServicesController::class, "edit"])->name("services.edit");
+    
+    Route::put('/services/{id}', [ServicesController::class, "update"])->name("services");
+    
+    Route::delete('/services/{service}', [ServicesController::class, "destroy"]);
+
+    // Service Components
+    // Route::get('/')
 
 });
 
