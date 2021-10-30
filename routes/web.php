@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\InvoiceController;
+// use App\Http\Controllers\VehicleTypes
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,7 @@ Route::get('/login', [LoginController::class, "showLoginForm"])->name('login')->
 Route::post('/login', [LoginController::class, "login"])->middleware('guest');
 
 Route::get('/', function () {
-    return redirect()->route('login.showForm');
+    return redirect()->route('login');
 });
 
 Route::get('/register', function(){
@@ -37,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+    // Users
     Route::get('/users', [UsersController::class, "index"])->name("users.all");
     Route::get('/users/create', [UsersController::class, "create"])->name("users.create");
     
@@ -52,9 +54,24 @@ Route::middleware(['auth'])->group(function () {
     
     Route::delete('/users/{user}', [UsersController::class, "destroy"]);
 
+    // Invoicing
     Route::get('/invoices/generate', [InvoiceController::class, 'create'])->name("invoice.generate");
     
     Route::post('/invoices/generate', [InvoiceController::class, 'store']);
+
+    // Vehicle Types
+    Route::get("/vehicle_types", [vehicleTypesController::class, 'index'])->name("vehicleTypes.all");
+    
+    Route::post('/vehicle_types/store', [vehicleTypesController::class, "store"])->name("vehicleTypes.store");
+
+    Route::get('/vehicle_types/{type}/edit', [vehicleTypesController::class, "edit"])->name("vehicleTypes.edit");
+    
+    Route::put('/vehicle_types/{id}', [vehicleTypesController::class, "update"])->name("vehicleTypes");
+    
+    Route::delete('/vehicle_types/{type}', [vehicleTypesController::class, "destroy"]);
+
+
+
 
 });
 

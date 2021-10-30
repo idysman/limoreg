@@ -36,42 +36,34 @@
 
             <div class="page-header">
                 <div class="page-title my-2">
-                    <h3>Manage all Users</h3>
+                    <h3>Manage Vehicle Types</h3>
                 </div>
             </div>
             
             <div class="row layout-top-spacing" id="cancel-row">
-            
                 <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                     <div class="widget-content widget-content-area br-6">
+                       <div class="d-flex justify-content-end">
+                            <button class="btn btn-primary p-2" data-toggle="modal" data-target="#vehicleTypeModal">Add Vehicle Type</button>
+                       </div>
                         <div class="table-responsive mb-4 mt-4">
                             <table id="html5-extension" class="table table-hover non-hover" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>First Name</th>
-                                        <th>Other Names</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Status</th>
-                                        <th>Role</th>
+                                        <th>S/N</th>
+                                        <th>Title</th>
+                                        <th>Description</th>
+                                        <th>date Created</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($users as $user)
+                                    @forelse ($vehicleTypes as $type)
                                         <tr>
-                                            <td>{{ $user->first_name }}</td>
-                                            <td>{{ $user->first_name . " ".$user->surname }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>{{ $user->phone }}</td>
-                                            <td>
-                                                @if ($user->status === 1)
-                                                    <span class="badge badge-primary">Active</span>
-                                                @else
-                                                    <span class="badge badge-warning">Deactivated</span>
-                                                @endif
-                                            </td>
-                                            <td>{{  $user->role === 1 ? "Admin" : ($user->role === 2 ? "Agent": "Inspector") }}</td>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $type->title }}</td>
+                                            <td>{{  empty($type->description) ? "No description": $type->description}}</td>
+                                            <td>{{ $type->created_at }}</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-dark btn-sm">Open</button>
@@ -79,15 +71,10 @@
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                                     </button>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-                                                    <a class="dropdown-item" href="{{ route('users.edit', $user) }}">Edit</a>
+                                                    <a class="dropdown-item" href="{{ route('vehicleTypes.edit', $type) }}">Edit</a>
                                                     <a class="dropdown-item" href="#">View</a>
-                                                        <form  action="{{ route("users", $user) }}" method="POST">
-                                                            @csrf
-                                                            @method("PATCH")
-                                                            <input class="form-item" value="{{ $user->status === 1 ? "Disable" : "Enable" }}" type="submit"/>
-                                                        </form>
                                                         
-                                                        <form  action="{{ route("users", $user) }}" method="POST">
+                                                        <form  action="{{ route("vehicleTypes", $type) }}" method="POST">
                                                             @csrf
                                                             @method("DELETE")
                                                             <input class="form-item" class="dropdown-item" value="Delete" type="submit"/>
@@ -98,10 +85,10 @@
                                             </td>
                                         </tr>
                                     @empty
-                                    <tr>
-                                        <td class="text-center" colspan="7"><span class="text-danger text-center">Vehicle types are not added yet</span>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td class="text-center" colspan="5"><span class="text-danger text-center">Vehicle types are not added yet</span>
+                                            </td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -112,6 +99,58 @@
             </div>
 
             </div>
+
+            {{-- Vehicle type modal --}}
+
+            <div id="modalVerticallyCentered" class="col-lg-12 layout-spacing">
+                    <!-- Modal -->
+                    <div class="modal fade" id="vehicleTypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalCenterTitle">Add New Vehicle Type</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="{{ route("vehicleTypes.store") }}" class="px-4">
+                                        @csrf
+                                        <div class="form-group mb-4">
+                                            <label for="name">Vehicle type title</label>
+                                            <input type="text" name="title" class="form-control @error('title') is-invalid @enderror " value="{{ old("title") }}" id="title" placeholder="Type description" required>
+                                                
+                                            @error('title')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label for="name">Description </label>
+                                            <textarea value="" name="description" class="form-control  @error('description') is-invalid @enderror" id="description" placeholder="">
+                                                {{ old("description") }}
+                                            </textarea>
+                                            <small>An optional vehicle type description.</small>
+        
+                                            @error('description')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                  
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+    
 @endsection
 
 @section("pageScripts")
