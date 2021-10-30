@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ServicesComponentController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\VehicleTypesController;
 
@@ -76,7 +77,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Services
 
-    Route::get("/services/components", [ServicesController::class, 'index'])->name("services.all");
+    Route::get("/services", [ServicesController::class, 'index'])->name("services.all");
     
     Route::post('/services/store', [ServicesController::class, "store"])->name("services.store");
 
@@ -87,7 +88,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/services/{service}', [ServicesController::class, "destroy"]);
 
     // Service Components
-    // Route::get('/')
+    Route::get("/services/components", [ServicesComponentController::class, 'index'])->name("services_comp.all");
+    
+    Route::post('/services/components/store', [ServicesComponentController::class, "store"])->name("services_comp.store");
+
+    Route::get('/services/components/{component}/edit', [ServicesComponentController::class, "edit"])->name("services_comp.edit");
+    
+    Route::put('/services/components/{id}', [ServicesComponentController::class, "update"])->name("services_comp");
+    
+    Route::delete('/services/components/{component}', [ServicesComponentController::class, "destroy"]);
 
 });
 

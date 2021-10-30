@@ -14,4 +14,9 @@ class Service extends Model
         'description',
         'item_code',
     ];
+
+
+    public function service_component(){
+        return $this->hasMany(ServiceComponent::class);
+    }
 }

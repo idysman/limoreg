@@ -15,7 +15,7 @@ class VehicleTypesController extends Controller
     public function index()
     {
        
-        $vehicleTypes = vehicleType::all();
+        $vehicleTypes = VehicleType::all();
         return view("vehicleTypes", compact("vehicleTypes"));
     }
 
@@ -34,7 +34,7 @@ class VehicleTypesController extends Controller
             "description"=> 'sometimes'
         ]);
         
-        vehicleType::create($request->all());
+        VehicleType::create($request->all());
       
       return back()->with('success', 'Vehicle type added successfully');
 
@@ -57,7 +57,7 @@ class VehicleTypesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(vehicleType $type)
+    public function edit(VehicleType $type)
     {
         return view('editVehicleType', compact("type"));
     }
@@ -91,7 +91,7 @@ class VehicleTypesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(vehicleType $type)
+    public function destroy(VehicleType $type)
     {
         $type->delete();
         
