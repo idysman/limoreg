@@ -5,6 +5,28 @@
     <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/datatable/datatables.css") }}">
     <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/datatable/dt-global_style.css") }}">
     <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/datatable/custom_dt_html5.css") }}">
+
+    <style>
+        .form-item {
+            font-size: 12px;
+            font-weight: 700;
+            color: #888ea8;
+            border:none;
+            background:none;
+            padding-top: 11px;
+            padding-bottom: 11px;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .form-item:hover{
+            background:#f1f2f3;
+            width:100%;
+            display:block;
+            padding-left:8px
+           
+        }
+                                                        
+    </style>
 @endsection
 
 @section("content")
@@ -40,7 +62,7 @@
                                         <tr>
                                             <td>{{ $user->first_name }}</td>
                                             <td>{{ $user->first_name . " ".$user->surname }}</td>
-                                            <td>n{{ $user->email }}</td>
+                                            <td>{{ $user->email }}</td>
                                             <td>{{ $user->phone }}</td>
                                             <td>
                                                 @if ($user->status === 1)
@@ -57,19 +79,19 @@
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                                     </button>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-                                                    <a class="dropdown-item" href="{{ route('edit.user', $user) }}">Edit</a>
-                                                    <a class="dropdown-item" href="/users/{{ $user }}">view</a>
-                                                        <form class="dropdown-item" action="/users/{{ $user }}" method="POST">
+                                                    <a class="dropdown-item" href="{{ route('users.edit', $user) }}">Edit</a>
+                                                    <a class="dropdown-item" href="#">View</a>
+                                                        <form  action="{{ route("users", $user) }}" method="POST">
                                                             @csrf
                                                             @method("PATCH")
-                                                            <input  class="dropdown-item" type="submit"/>
+                                                            <input class="form-item" value="{{ $user->status === 1 ? "Disable" : "Enable" }}" type="submit"/>
                                                         </form>
                                                         
-                                                        {{-- <form  action="{{ route("delete.user", $user->id) }}" method="POST">
+                                                        <form  action="{{ route("users", $user) }}" method="POST">
                                                             @csrf
                                                             @method("DELETE")
-                                                            <input class="dropdown-item" type="submit"/>
-                                                        </form> --}}
+                                                            <input class="form-item" class="dropdown-item" value="Delete" type="submit"/>
+                                                        </form>
                                                    
                                                     </div>
                                                 </div>

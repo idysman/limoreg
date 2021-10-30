@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="widget-content widget-content-area">
-                        <form method="POST" action="{{ route("update.user", $user) }}" class="px-4">
+                        <form method="POST" action="{{ route("users", $user) }}" class="px-4">
                             @csrf
                             @method("PUT")
                             <div class="form-row">
@@ -116,7 +116,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group mb-4">
                                         <label for="name">Password</label>
-                                        <input type="password" name="password" value="" class="form-control @error('password') is-invalid @enderror" required  placeholder="Password *">
+                                        <input type="password" name="password" value="" class="form-control @error('password') is-invalid @enderror" placeholder="Password *">
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -127,7 +127,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="name">Confirm Password</label>
-                                    <input type="password" name="password_confirmation" value="" class="form-control" id="rConfirmPassword" required placeholder="Confirm Password *">
+                                    <input type="password" name="password_confirmation" value="" class="form-control" id="rConfirmPassword" placeholder="Confirm Password *">
                                 </div>
                            </div>
                           </div>

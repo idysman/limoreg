@@ -18,7 +18,6 @@ class UsersController extends Controller
     {
         //query all users
         $users = User::all();
-
         return view("allUsers", ["users"=>  $users]);
     }
 
@@ -84,8 +83,8 @@ class UsersController extends Controller
             'middle_name' => $request->middle_name,
             'phone'=> $request->phone,
             'email' => $request->email,
-            "role" => $request,
-            'password' => Hash::make($request->password),
+            "role" => $request->role,
+            'password' => $request->has("password") ? Hash::make($request->password): $user->password,
         ]);
         return back()->with('success', 'User updated succesfully');
     }
@@ -96,9 +95,11 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        
+        return back()->with("success", "User delete successfully");
     }
 
 
@@ -108,9 +109,16 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function disable($id)
+    public function disable(User $user)
     {
-        //
+        if($user->status === 1){
+            $user->status = 0;
+            $user->save();
+            return back()->with("success", "User deactivated successfully");
+        }
+        $user->status = 1;
+        $user->save();
+        return back()->with("success", "User activated succesfully");
     }
     
     /**

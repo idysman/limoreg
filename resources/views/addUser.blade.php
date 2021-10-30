@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="widget-content widget-content-area">
-                        <form method="POST" action="{{ route("store.user") }}" class="px-4">
+                        <form method="POST" action="{{ route("users.store") }}" class="px-4">
                             @csrf
                             <div class="form-row">
                             <div class="col-sm-6">

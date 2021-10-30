@@ -11,7 +11,7 @@
                         <h1 class="">Welcome. Sign In</h1>
                         <p class="">Log in to your account to continue.</p>
                         
-                        <form class="text-left" method="POST"  action="{{ route('login.store') }}">
+                        <form class="text-left" method="POST"  action="{{ route('login') }}">
                             @csrf
                             <div class="form">
 

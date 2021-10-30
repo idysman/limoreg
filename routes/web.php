@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +18,9 @@ use App\Http\Controllers\Auth\LoginController;
 */
 
 
-Route::get('/login', [LoginController::class, "showLoginForm"])->name('login.showForm')->middleware('guest');
+Route::get('/login', [LoginController::class, "showLoginForm"])->name('login')->middleware('guest');
 
-Route::post('/login', [LoginController::class, "login"])->name('login.store')->middleware('guest');
+Route::post('/login', [LoginController::class, "login"])->middleware('guest');
 
 Route::get('/', function () {
     return redirect()->route('login.showForm');
@@ -27,7 +28,7 @@ Route::get('/', function () {
 
 Route::get('/register', function(){
     // Register router  disabled
-    return redirect()->route('login.store');
+    return redirect()->route('login');
 });
 
 // Auth::routes();
@@ -36,22 +37,24 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-    Route::get('/users', [UsersController::class, "index"])->name("users");
-    Route::get('/users/create', [UsersController::class, "create"])->name("create.user");
+    Route::get('/users', [UsersController::class, "index"])->name("users.all");
+    Route::get('/users/create', [UsersController::class, "create"])->name("users.create");
     
-    Route::post('/users/store', [UsersController::class, "store"])->name("store.user");
+    Route::post('/users/store', [UsersController::class, "store"])->name("users.store");
 
-    Route::get('/users/{user}/edit', [UsersController::class, "edit"])->name("edit.user");
+    Route::get('/users/{user}/edit', [UsersController::class, "edit"])->name("users.edit");
     
-    Route::put('/users/{user}', [UsersController::class, "update"])->name("update.user");
+    Route::put('/users/{user}', [UsersController::class, "update"])->name("users");
     
-    Route::get('/users/{user}', [UsersController::class, "show"])->name("show.user");
+    Route::get('/users/{user}', [UsersController::class, "show"]);
     
-    Route::patch('/users/{user}', [UsersController::class, "disable"])->name("disable.user");
+    Route::patch('/users/{user}', [UsersController::class, "disable"]);
     
-    Route::get('/users/{user}', [UsersController::class, "destroy"])->name("destroy.user");
+    Route::delete('/users/{user}', [UsersController::class, "destroy"]);
 
-    // Route::get('/payments)
+    Route::get('/invoices/generate', [InvoiceController::class, 'create'])->name("invoice.generate");
+    
+    Route::post('/invoices/generate', [InvoiceController::class, 'store']);
 
 });
 
