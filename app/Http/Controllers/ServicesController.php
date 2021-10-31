@@ -34,8 +34,12 @@ class ServicesController extends Controller
                 "item_code"=> 'required|max:15',
                 "description"=> 'sometimes'
         ]);
+        
+        $service = $request->except(["description", "_token"]);
 
-        Service::create($request->all());
+        $service["description"] = $request->description ?? "";
+
+        Service::create($service);
 
         return back()->with("success", "Services added successfully");
     }

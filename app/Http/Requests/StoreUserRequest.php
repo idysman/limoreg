@@ -36,7 +36,6 @@ class StoreUserRequest extends FormRequest
             $rules += [
                 'phone' => ['required', 'string','max:11'],
                 'email' => ['required', 'string', 'email', 'max:255',],
-                // Check here again
                 // 'password' => ['string', 'min:8',]
             ];
             return $rules;

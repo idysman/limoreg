@@ -122,7 +122,7 @@
                                         @csrf
                                         <div class="form-group mb-4">
                                             <label for="title">Service component title</label>
-                                            <input type="text" name="title" class="form-control @error('title') is-invalid @enderror " value="{{ old("title") }}" id="title" placeholder="Type description" required>
+                                            <input type="text" name="title" class="form-control @error('title') is-invalid @enderror " value="{{ old("title") }}" id="title" placeholder="Component title" required>
                                                 
                                             @error('title')
                                                 <span class="invalid-feedback" role="alert">
@@ -164,7 +164,7 @@
                                         </div>
                                         <div class="form-group mb-4">
                                             <label for="tit">Service component amount (₦)</label>
-                                            <input type="number" name="amount" class="form-control @error('amount') is-invalid @enderror " value="{{ old("amount") }}" id="title" placeholder="Type description" required>
+                                            <input type="number" name="amount" class="form-control @error('amount') is-invalid @enderror " value="{{ old("amount") }}" id="title" placeholder="Service Cost" required>
                                             
                                             @error('amount')
                                                 <span class="invalid-feedback" role="alert">

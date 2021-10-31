@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ServicesComponentController;
 use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\VehiclesController;
 use App\Http\Controllers\VehicleTypesController;
 
 
@@ -60,10 +61,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/users/{user}', [UsersController::class, "destroy"]);
 
     // Invoicing
-    Route::get('/invoices/generate', [InvoiceController::class, 'create'])->name("invoice.generate");
+    Route::get('/invoices/{vehicle}/generate', [InvoiceController::class, 'create'])->name("invoice.generate");
     
-    Route::post('/invoices/generate', [InvoiceController::class, 'store']);
-   
+    Route::post('/invoices/{vehicle}/store', [InvoiceController::class, 'store'])->name("invoice.store");
+
     // Vehicle Types
     Route::get("/vehicle_types", [vehicleTypesController::class, 'index'])->name("vehicleTypes.all");
     
@@ -75,8 +76,24 @@ Route::middleware(['auth'])->group(function () {
     
     Route::delete('/vehicle_types/{type}', [VehicleTypesController::class, "destroy"]);
 
-    // Services
+    // Vehicles
+    Route::get('/vehicles', [VehiclesController::class, "index"])->name("vehicles.all");
+    
+    Route::get('/vehicles/register', [VehiclesController::class, "register"])->name("vehicles.register");
+    
+    Route::post('/vehicles/store', [VehiclesController::class, "store"])->name("vehicles.store");
+    
+    Route::get('/vehicles/{vehicle}/edit', [VehiclesController::class, "edit"])->name("vehicles.edit");
+    
+    Route::put('/vehicles/{vehicle}', [VehiclesController::class, "update"])->name("vehicles");
+    
+    Route::get('/vehicles/{vehicle}', [VehiclesController::class, "show"]);
+    
+    Route::delete('/vehicles/{vehicle}', [VehiclesController::class, "delete"]);
 
+    Route::post('/vehicles/verify', [VehiclesController::class, 'verify_vehicle'])->name('vehicles.verify');
+   
+    // Services
     Route::get("/services", [ServicesController::class, 'index'])->name("services.all");
     
     Route::post('/services/store', [ServicesController::class, "store"])->name("services.store");
