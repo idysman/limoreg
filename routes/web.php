@@ -65,6 +65,9 @@ Route::middleware(['auth'])->group(function () {
     
     Route::post('/invoices/{vehicle}/store', [InvoiceController::class, 'store'])->name("invoice.store");
 
+    // FShow Invoice file
+    Route::get("/invoices/show", [InvoiceController::class, "showInvoice"]);
+
     // Vehicle Types
     Route::get("/vehicle_types", [vehicleTypesController::class, 'index'])->name("vehicleTypes.all");
     

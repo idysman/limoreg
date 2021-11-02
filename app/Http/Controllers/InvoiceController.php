@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
-use App\Models\ServiceComponent;
 use App\Models\Vehicle;
+// use Barryvdh\DomPDF\PDF;
+use Barryvdh\DomPDF\PDF;
+use Illuminate\Http\File;
 use App\Models\VehicleType;
 use Illuminate\Http\Request;
+use App\Models\ServiceComponent;
 use Illuminate\Support\Facades\DB;
-use stdClass;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 
 class InvoiceController extends Controller
 {
@@ -102,18 +106,26 @@ class InvoiceController extends Controller
                     foreach ($selected_components as $cmpId) {
                         $query = ServiceComponent::where("id", $cmpId)->where("service_id",  $servId);
                         if(!$query->exists()){
-                            // Component Id's modified from the front-end
+                            // Component Id's tampered with from the front-end
                             return back()->with("error", "Error occured, please try again");
                         }
                         $comp_amts += $query->value("amount");
 
                         // prepare invoice breakdown records to be inserted
                         array_push($services_comp, ["service_id"=> $servId, "component_id"=> $cmpId]);
-                   }
+                   }//EndForeach Components
 
                 // Prepare invoice records to be inserted
                    
-                array_push($invoiceQueryData, ["vehicle_id"=> $vehicle->id, "amount"=> $comp_amts, "service_id"=> $servId, "status"=> "unpaid"]);
+                // Use this for testing (@Testing)
+                array_push($invoiceQueryData, [
+                    "vehicle_id"=> $vehicle->id, 
+                    "amount"=> $comp_amts, 
+                    "service_id"=> $servId, 
+                    "status"=> "unpaid",
+                    "mnta_ref" => "mnta_65756hrtyr",
+                    "file" => "http/data.url",
+                ]);
 
                 // prepare payload's service data
                 
@@ -126,7 +138,7 @@ class InvoiceController extends Controller
 
                 array_push($payload_services, $serviceObj);
 
-            }
+            }//EndForeach Services
 
             // Store invoice and invoice breakdown
             foreach ($invoiceQueryData as $data) {
@@ -140,14 +152,12 @@ class InvoiceController extends Controller
 
                 foreach ($services_comp as $component) {
                   if($component["service_id"] === $invoice_array["service_id"]){
+                    // Track the invoice Id also
                     $component["invoice_id"] = $invoice_array["invoice_id"];
-                    
                     DB::table('invoices_breakdown')->insert($component);
                   }
-                  continue;
                 }
             }
-
            
             // Prepare the payload's data
             $payload = (object) array(
@@ -182,7 +192,24 @@ class InvoiceController extends Controller
             );
 
 
-            dd(json_encode($payload));
+            // dd(json_encode($payload));
+            $pdf = App::make('dompdf.wrapper');
+            
+            $pdf->loadView('pdf.invoice');
+
+            // $pdf = PDF::loadView('admin.tagihan.pdf', compact('bills','today')); passing data to view here
+
+            $content = $pdf->download()->getOriginalContent();
+
+            $filename = uniqid().".pdf";
+            
+            Storage::disk('local')->put("/invoices/{$filename}",  $content);
+
+            // Store Files in the session and redirect to render data
+
+            // Move file 
+
+
             // Interact with Revpro's API
         //     $curl = curl_init();
             
@@ -229,9 +256,10 @@ class InvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showInvoice()
     {
         //
+        return view("pdf.invoice");
     }
 
     /**
