@@ -16,7 +16,8 @@ class VehiclesController extends Controller
      */
     public function index()
     {
-        //
+        $vehicles = Vehicle::get();
+        return view('vehicles',['vehicles' => $vehicles]);
     }
 
     /**
@@ -27,7 +28,7 @@ class VehiclesController extends Controller
     public function register()
     {
         $vehicle_types = VehicleType::all();
-        
+
         return view("addVehicle", compact("vehicle_types"));
     }
 
@@ -41,11 +42,11 @@ class VehiclesController extends Controller
     {
         //    validated input
         $vehicle = $request->except(['vehicle_type', '_token']);
-        
+
         $vehicle["vehicle_type_id"] = $request->vehicle_type;
 
         Vehicle::create($vehicle);
-        
+
         return back()->with('success', 'Vehicle registered successfully');
     }
 
@@ -57,7 +58,9 @@ class VehiclesController extends Controller
      */
     public function show($id)
     {
-        //
+        $vehicle_data = Vehicle::where('id', $id)->first();
+
+        return view('showVehicle',['vehicle' => $vehicle_data]);
     }
 
     /**
@@ -66,9 +69,15 @@ class VehiclesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($vehicle)
     {
-        //
+        $vehicle_types = VehicleType::all();
+        $vehicle_data = Vehicle::where('id',$vehicle)->first();
+
+        return view('editVehicle', [
+            'vehicle' => $vehicle_data,
+            'vehicle_types' => $vehicle_types
+        ]);
     }
 
     /**
@@ -78,9 +87,16 @@ class VehiclesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreVehicleRequest $request, $id)
     {
-        //
+
+        $vehicle_fields = array_intersect(array_keys($request->all()), app(Vehicle::class)->getFillable());
+        $vehicle_data = $request->only($vehicle_fields);
+
+        Vehicle::where('id',$id)->update($vehicle_data);
+
+        return back()->with('success', 'Vehicle updated successfully');
+
     }
 
     /**
@@ -91,7 +107,9 @@ class VehiclesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Vehicle::where('id',$id)->delete();
+
+        return back()->with('success', 'Vehicle deleted successfully');
     }
 
      /**
@@ -121,4 +139,6 @@ class VehiclesController extends Controller
         // 'agent_pin' => 'required|numeric|min:6',
         // 'access_token'    => 'required|exists:agent_access_tokens,access_token'
     }
+
+
 }
