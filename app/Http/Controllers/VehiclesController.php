@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreVehicleRequest;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
-use Illuminate\Http\Request;
+
 
 class VehiclesController extends Controller
 {
@@ -44,6 +44,8 @@ class VehiclesController extends Controller
         $vehicle = $request->except(['vehicle_type', '_token']);
 
         $vehicle["vehicle_type_id"] = $request->vehicle_type;
+
+        $vehicle["created_by"] = auth()->user()->id;
 
         Vehicle::create($vehicle);
 

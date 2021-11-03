@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVehicleTypesTable extends Migration
+class AddFileAndTransRefColumnToInvoicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateVehicleTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('vehicle_types', function (Blueprint $table) {
-            $table->id();
-            $table->string("title");
-            $table->text("description")->nullable();
-            $table->timestamps();
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->string("trans_ref");
+            $table->string("file");
         });
     }
 
@@ -28,6 +26,9 @@ class CreateVehicleTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vehicle_types');
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->dropColumn("trans_ref");
+            $table->dropColumn("file");
+        });
     }
 }

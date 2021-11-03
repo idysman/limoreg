@@ -17,6 +17,7 @@ class CreateInvoicesTable extends Migration
             $table->id();
             $table->foreignId("vehicle_id")->references("id")->on("vehicles");
             $table->foreignId("service_id")->references("id")->on("services");
+            $table->foreignId("created_by")->references('id')->on("users");
             $table->string("status")->default("unpaid");
             $table->string("amount");
             $table->timestamps();
