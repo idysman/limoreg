@@ -136,6 +136,7 @@ class InvoiceController extends Controller
                     "vehicle_id"=> $vehicle->id, 
                     "amount"=> $comp_amts, 
                     "service_id"=> $servId, 
+                    "service_name"=> $service->service_name,
                     "status"=> "unpaid",
                 ]);
 
@@ -208,7 +209,7 @@ class InvoiceController extends Controller
             }
             
             $response = json_decode($response);
-            
+
             if($response->status !== "success" || empty($response->invoice_no)){
                 return back()->with("error", "Error occured while initiating request. Please try again later");
             }
@@ -221,13 +222,17 @@ class InvoiceController extends Controller
 
                 $data["created_at"] = now();
 
+                $data["invoice_nos"] = $response->invoice_no;
+
+                $createdBy = auth()->user()->first_name ." ".auth()->user()->surname;
+
                 // Retrieve service's breakdownn using the different service Ids
                 $invoice_breakdown = $services_comp["{$data["service_id"]}"];
 
                 // Generate invoice PDF
                 $pdf = App::make('dompdf.wrapper');
             
-                $pdf->loadView('pdf.invoice', ["vehicle"=>$vehicle, "invoice_breakdown"=> $invoice_breakdown, "invoice" => ["date_created"=> $data["created_at"], "trans_ref"=> $data["trans_ref"], "agent"=> "Ada Jacobs", "status"=> "Unpaid", "service"=> $response->data[$key]->name, "total_amount"=>$response->data[$key]->amount]]);
+                $pdf->loadView('pdf.invoice', ["vehicle"=>$vehicle, "invoice_breakdown"=> $invoice_breakdown, "invoice" => ["date_created"=> $data["created_at"], "trans_ref"=> $data["trans_ref"], "agent"=> $createdBy, "status"=> "Unpaid", "service"=> $data["service_name"], "total_amount"=>$response->data[$key]->amount, "invoice_nos"=> $data["invoice_nos"]]]);
               
                 $content = $pdf->download()->getOriginalContent();
 
@@ -239,16 +244,20 @@ class InvoiceController extends Controller
                 $data["file"] = Storage::url("invoices/{$filename}");
 
                 $data["created_by"] = auth()->user()->id;
+
+                // Service name not relevant while inserting invoice
+                unset($data["service_name"]);
                 
                 // Store Invoice
                 $id = DB::table('invoices')->insertGetId($data);
 
                 // Retrieve and format invoice breakdown
-                $invoice_breakdown = array_map(function($data) use ($id) {
-                    $data["invoice_id"] = $id;
-                    unset($data["title"]);
-                    unset($data["amount"]);
-                    return $data;
+                $invoice_breakdown = array_map(function($breakdown) use ($id) {
+                    $breakdown["invoice_id"] = $id;
+                    $breakdown["created_at"] = now();
+                    unset($breakdown["title"]);
+                    unset($breakdown["amount"]);
+                    return $breakdown;
                 }, $invoice_breakdown);
 
                 //  Finally, store invoice breakdown

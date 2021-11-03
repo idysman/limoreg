@@ -26,6 +26,7 @@ class Vehicle extends Model
         'engine_capacity',
         'tank_capacity',
         'odometer',
+        'created_by',
         'color',
         'fuel_type',
         'year_of_manufacture',

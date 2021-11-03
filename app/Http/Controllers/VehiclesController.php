@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreVehicleRequest;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
+use Illuminate\Http\Request;
+use App\Http\Requests\StoreVehicleRequest;
 
 
 class VehiclesController extends Controller
