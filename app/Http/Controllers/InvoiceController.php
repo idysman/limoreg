@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use App\Models\Vehicle;
-// use Barryvdh\DomPDF\PDF;
 use Barryvdh\DomPDF\PDF;
-use Illuminate\Http\File;
 use App\Models\VehicleType;
 use Illuminate\Http\Request;
 use App\Models\ServiceComponent;
@@ -23,7 +21,15 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        //
+      
+        $invoices = DB::table("invoices")
+            ->join('vehicles', 'invoices.vehicle_id', '=', 'vehicles.id')
+            ->join('services', 'invoices.service_id', '=', 'services.id')
+            ->join('users', 'invoices.created_by', '=', 'users.id')
+            ->select('users.first_name','users.surname', 'invoices.*','services.service_name', 'vehicles.plate_number')
+            ->get();
+        
+            return view('invoices', compact('invoices'));
     }
 
     /**
@@ -53,7 +59,6 @@ class InvoiceController extends Controller
 
        
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -88,6 +93,8 @@ class InvoiceController extends Controller
                 $payload_services = []; 
                 
                 $services_comp = [];
+                 
+                $invoice_preview = []; 
 
                 $selected_services = $request->service;
                 
@@ -158,8 +165,8 @@ class InvoiceController extends Controller
                 "last_name" => $vehicle->owner_surname,
                 "email" => $vehicle->owner_email,
                 "phone" => $vehicle->owner_phone,
-                "tin" => "2343253534", // query here for more info
-                "birs_id"=> "3423424", // query here for more info
+                "tin" => $vehicle->tin ?? "", // query here for more info
+                "birs_id"=> $vehicle->iirs_id ?? "", // query here for more info
                 "payment_type"=> "bank", 
                 "service" => $payload_services,
                 "engine_number"=> $vehicle->engine_number ?? "",
@@ -241,9 +248,12 @@ class InvoiceController extends Controller
                 // Upload file to invoice folder
                 Storage::disk('local')->put("/invoices/{$filename}",  $content);
 
-                $data["file"] = Storage::url("invoices/{$filename}");
+                $data["file"] = "invoices/{$filename}";
 
                 $data["created_by"] = auth()->user()->id;
+
+                // Store Items to be rendered on preview page
+                $invoice_preview[] = ["service"=> $data["service_name"]];
 
                 // Service name not relevant while inserting invoice
                 unset($data["service_name"]);
@@ -259,23 +269,25 @@ class InvoiceController extends Controller
                     unset($breakdown["amount"]);
                     return $breakdown;
                 }, $invoice_breakdown);
-
+                
+                $invoice_preview[$key]["invoice_id"] = $id; //Track invoice Id also. Will be used in the invoice preview page
                 //  Finally, store invoice breakdown
                 DB::table('invoices_breakdown')->insert($invoice_breakdown);
                
             }
 
-            // Do something here
-            return back()->with("success", "Vehicle renewal initiated successfully");
+            // Flash invoice preview data into sesssion 
+            $request->session()->flash('preview_invoices', $invoice_preview);
+            
+            // Operation is successful, Redirect to invoice preview page to render generated invoices.
+            return redirect()->route('invoices.preview');
         
         }
-
             return back()->with("error". "You have not selected any service.");
         }
 
         return back()->with("error". "Error occured, Please try again.");
     }
-
     /**
      * Display the specified resource.
      *
@@ -284,41 +296,60 @@ class InvoiceController extends Controller
      */
     public function showInvoice()
     {
-        //
+        //Only used for testing purpose
         return view("pdf.invoice");
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     /**
+     * Download Invoices
      */
-    public function edit($id)
-    {
-        //
+    public function download(Request $request){
+
+        $request->validate(
+            ["invoice" => "required|integer"]
+        );
+
+        $query = DB::table('invoices')->where('id', $request->invoice);
+
+        if( $query->exists()){
+            $file = $query->value("file");
+            
+            return Storage::download($file);
+        }
+        return back()->with('error', 'Sorry, an error occured. Please try again latter');
+
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+     * Display Generated invoices
+     *  
+     * */   
+    public function preview(){
+    //   Check whether  the required parameters are persisted in session
+        if(!session("preview_invoices")){
+            return back()->with("error", "No invoice is selected. Kindly select an invoice from the invoice page");
+      }
+   
+      $invoices = session("preview_invoices");
+      
+      return view('invoicePreview', compact('invoices'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+    /***
+     * Process and render Invoice Breakdown
+     * 
      */
-    public function destroy($id)
-    {
-        //
+    public function invoice_breakdown($invoice_id){
+
+        $components = DB::table("invoices_breakdown as IB")
+            ->join('service_components as C', 'C.id', '=', 'IB.component_id')
+            ->where('IB.invoice_id', $invoice_id)
+            ->select('C.title','C.amount')
+            ->get();
+
+        $invoice = DB::table('invoices')->where('id', $invoice_id)->select('amount as total', 'trans_ref','invoice_nos')->first();
+            
+        
+        return view("invoiceBreakdown", compact('components', 'invoice'));
     }
 }

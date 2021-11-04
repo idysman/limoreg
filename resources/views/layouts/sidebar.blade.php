@@ -67,6 +67,21 @@
             </li>
 
 
+            <li class="menu">
+                <a href="#logout" data-active="false" class="menu-toggle">
+                    <div class="base-menu">
+                        <div class="base-icons">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 17l5-5-5-5M19.8 12H9M10 3H4v18h6"/></svg>
+                        </div>
+                        <span>Logout</span>
+
+                       
+                    </div>
+                </a>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </li>
+
+
         </ul>
     </nav>
 
@@ -139,19 +154,36 @@
         <div class="submenu" id="invoices">
             <ul class="submenu-list" data-parent-element="#invoices">
                 <li>
-                    <a href="{{ route("services.all") }}">
+                    <a href="{{ route('invoices.all') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
                         Manage Invoices
                     </a>
 
                     <a href="#" data-toggle="modal" data-target="#invoiceModal">
-                        {{-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg> --}}
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                         Create Invoice
                     </a>
                 </li>
             </ul>
         </div>
+
+        <div class="submenu" id="logout">
+            <ul class="submenu-list" data-parent-element="#logout">
+                <li>
+                    <a href="{{ route("logout") }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
+                        Logout
+                    </a>
+
+                   
+                </li>
+            </ul>
+        </div>
+
+
+
+
+
     </div>
 
 </div>

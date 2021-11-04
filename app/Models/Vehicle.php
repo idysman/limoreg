@@ -35,6 +35,8 @@ class Vehicle extends Model
         'owner_identification',
         'identification_no',
         'state',
+        'iirs_id',
+        'tin',
         'lga'
     ];
 }

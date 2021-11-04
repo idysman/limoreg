@@ -38,7 +38,7 @@ Route::get('/register', function(){
     return redirect()->route('login');
 });
 
-// Auth::routes();
+Route::get('/logout', [LoginController::class, "logout"])->name('logout')->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -60,13 +60,22 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/users/{user}', [UsersController::class, "destroy"]);
 
-    // Invoicing
+   
+    Route::get('invoices/all', [InvoiceController::class, 'index'])->name('invoices.all');
+    
+    Route::get('/invoices/preview', [InvoiceController::class, 'preview'])->name('invoices.preview');
+
+    Route::post('/invoices/download', [InvoiceController::class, 'download'])->name('invoices.download');
+    
+    Route::get('/invoices/{invoice}/details', [InvoiceController::class, 'invoice_breakdown'])->name("invoices.breakdown");
+
     Route::get('/invoices/{vehicle}/generate', [InvoiceController::class, 'create'])->name("invoice.generate");
 
     Route::post('/invoices/{vehicle}/store', [InvoiceController::class, 'store'])->name("invoice.store");
 
-    // FShow Invoice file
     Route::get("/invoices/show", [InvoiceController::class, "showInvoice"]);
+    
+    
 
     // Vehicle Types
     Route::get("/vehicle_types", [vehicleTypesController::class, 'index'])->name("vehicleTypes.all");

@@ -49,6 +49,8 @@ class StoreVehicleRequest extends FormRequest
             'identification_no' => ['required', 'string', 'max:255'],
             'state'=> ['required', 'string'],
             'lga' => ['required', 'string'],
+            'tin' => ['sometimes', 'string'],
+            'iirs_id' => ['sometimes', 'string'],
         ];
     }
 }

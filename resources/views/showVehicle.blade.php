@@ -29,7 +29,7 @@
                             <a href="{{ route('vehicles.edit',$vehicle->id) }}" class="mt-2 edit-profile"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a>
                         </div>
                         <div class="text-center user-info">
-                            <img src="assets/img/90x90.jpg" alt="avatar">
+                            <img src="{{ asset('assets/img/car.png') }}" class="px-3" width="150px" alt="avatar">
                             <p class="">{{ $vehicle->owner_fname." ".$vehicle->owner_surname }}</p>
                         </div>
                         <div class="user-info-list">
@@ -49,7 +49,13 @@
                                         <strong>Email: </strong>{{ $vehicle->owner_email }}</a>
                                     </li>
                                     <li class="contacts-block__item">
-                                        <strong>Phone Number</strong> {{ $vehicle->owner_phone }}
+                                        <strong>Phone Number: </strong> {{ $vehicle->owner_phone }}
+                                    </li>
+                                    <li class="contacts-block__item">
+                                        <strong>TIN: </strong> {{ $vehicle->tin ?? "" }}
+                                    </li>
+                                    <li class="contacts-block__item">
+                                        <strong>Phone Number: </strong> {{ $vehicle->iirs_id ?? "" }}
                                     </li>
                                 </ul>
                             </div>
