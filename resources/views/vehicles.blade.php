@@ -69,15 +69,21 @@
 
                                             <td>
                                                 <div class="btn-group">
-                                                    <a class="dropdown-item" href="{{ route('vehicles.edit',$vehicle->id) }}">Edit</a>
-                                                    <a class="dropdown-item" href="{{ route('vehicles',$vehicle->id) }}">View</a>
-
-                                                        <form  action="{{ route("vehicles", $vehicle->id) }}" method="POST">
-                                                            @csrf
-                                                            @method("DELETE")
-                                                            <input class="form-item" class="dropdown-item" value="Delete" type="submit"/>
-                                                        </form>
-
+                                                    <button type="button" class="btn btn-dark btn-sm">Open</button>
+                                                    <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
+                                                        <a class="dropdown-item" href="{{ route('vehicles.edit',$vehicle->id) }}">Edit</a>
+                                                        <a class="dropdown-item" href="{{ route('vehicles',$vehicle->id) }}">View</a>
+                                                        @if (auth()->user()->role === 1)
+                                                            <form  action="{{ route("vehicles", $vehicle->id) }}" method="POST">
+                                                                @csrf
+                                                                @method("DELETE")
+                                                                <input class="form-item" class="dropdown-item" value="Delete" type="submit"/>
+                                                            </form> 
+                                                        @endif
+                                                      
                                                     </div>
                                                 </div>
                                             </td>

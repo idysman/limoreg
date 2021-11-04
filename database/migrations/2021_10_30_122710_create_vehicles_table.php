@@ -42,6 +42,7 @@ class CreateVehiclesTable extends Migration
             $table->string("lga");
             $table->dateTime("last_renewal_date")->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

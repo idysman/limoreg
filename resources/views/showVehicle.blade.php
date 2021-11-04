@@ -108,7 +108,7 @@
                                     <td>{{ $vehicle->tank_capacity }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Cartegory</td>
+                                    <td>Category</td>
                                     <td>{{ $vehicle->category }}</td>
                                 </tr>
                                 <tr>

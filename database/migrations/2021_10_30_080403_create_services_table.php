@@ -19,6 +19,7 @@ class CreateServicesTable extends Migration
             $table->string("item_code");
             $table->text("description")->default("");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

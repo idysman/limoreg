@@ -44,23 +44,60 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-    // Users
-    Route::get('/users', [UsersController::class, "index"])->name("users.all");
-    Route::get('/users/create', [UsersController::class, "create"])->name("users.create");
+    Route::get('/users/profile', [UsersController::class, "show"])->name('users.profile');
 
-    Route::post('/users/store', [UsersController::class, "store"])->name("users.store");
+    Route::middleware(['is_superAdmin'])->group(function () {
+         // Users
+        Route::get('/users', [UsersController::class, "index"])->name("users.all");
+        
+        Route::get('/users/create', [UsersController::class, "create"])->name("users.create");
 
-    Route::get('/users/{user}/edit', [UsersController::class, "edit"])->name("users.edit");
+        Route::post('/users/store', [UsersController::class, "store"])->name("users.store");
 
-    Route::put('/users/{user}', [UsersController::class, "update"])->name("users");
+        Route::get('/users/{user}/edit', [UsersController::class, "edit"])->name("users.edit");
 
-    Route::get('/users/{user}', [UsersController::class, "show"]);
+        Route::put('/users/{user}', [UsersController::class, "update"])->name("users");
 
-    Route::patch('/users/{user}', [UsersController::class, "disable"]);
+        Route::patch('/users/{user}', [UsersController::class, "disable"]);
 
-    Route::delete('/users/{user}', [UsersController::class, "destroy"]);
+        Route::delete('/users/{user}', [UsersController::class, "destroy"]);
 
-   
+         // Vehicle Types
+        Route::get("/vehicle_types", [vehicleTypesController::class, 'index'])->name("vehicleTypes.all");
+
+        Route::post('/vehicle_types/store', [VehicleTypesController::class, "store"])->name("vehicleTypes.store");
+
+        Route::get('/vehicle_types/{type}/edit', [VehicleTypesController::class, "edit"])->name("vehicleTypes.edit");
+
+        Route::put('/vehicle_types/{id}', [VehicleTypesController::class, "update"])->name("vehicleTypes");
+
+        Route::delete('/vehicle_types/{type}', [VehicleTypesController::class, "destroy"]);
+
+            // Services
+        Route::get("/services", [ServicesController::class, 'index'])->name("services.all");
+
+        Route::post('/services/store', [ServicesController::class, "store"])->name("services.store");
+
+        Route::get('/services/{service}/edit', [ServicesController::class, "edit"])->name("services.edit");
+
+        Route::put('/services/{id}', [ServicesController::class, "update"])->name("services");
+
+        Route::delete('/services/{service}', [ServicesController::class, "destroy"]);
+
+        // Service Components
+        Route::get("/services/components", [ServicesComponentController::class, 'index'])->name("services_comp.all");
+
+        Route::post('/services/components/store', [ServicesComponentController::class, "store"])->name("services_comp.store");
+
+        Route::get('/services/components/{component}/edit', [ServicesComponentController::class, "edit"])->name("services_comp.edit");
+
+        Route::put('/services/components/{id}', [ServicesComponentController::class, "update"])->name("services_comp");
+
+        Route::delete('/services/components/{component}', [ServicesComponentController::class, "destroy"]);
+
+    });
+    
+    //Invoices 
     Route::get('invoices/all', [InvoiceController::class, 'index'])->name('invoices.all');
     
     Route::get('/invoices/preview', [InvoiceController::class, 'preview'])->name('invoices.preview');
@@ -74,19 +111,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/invoices/{vehicle}/store', [InvoiceController::class, 'store'])->name("invoice.store");
 
     Route::get("/invoices/show", [InvoiceController::class, "showInvoice"]);
-    
-    
-
-    // Vehicle Types
-    Route::get("/vehicle_types", [vehicleTypesController::class, 'index'])->name("vehicleTypes.all");
-
-    Route::post('/vehicle_types/store', [VehicleTypesController::class, "store"])->name("vehicleTypes.store");
-
-    Route::get('/vehicle_types/{type}/edit', [VehicleTypesController::class, "edit"])->name("vehicleTypes.edit");
-
-    Route::put('/vehicle_types/{id}', [VehicleTypesController::class, "update"])->name("vehicleTypes");
-
-    Route::delete('/vehicle_types/{type}', [VehicleTypesController::class, "destroy"]);
 
     // Vehicles
     Route::get('/vehicles', [VehiclesController::class, "index"])->name("vehicles.all");
@@ -100,31 +124,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/vehicles/{vehicle}', [VehiclesController::class, "update"])->name("vehicles");
 
     Route::get('/vehicles/{vehicle}', [VehiclesController::class, "show"]);
-    Route::delete('/vehicles/{vehicle}', [VehiclesController::class, "delete"]);
+    
+    // Functionality can only be used by superadmin
+    Route::delete('/vehicles/{vehicle}', [VehiclesController::class, "delete"])->middleware('is_superAdmin');
 
     Route::post('/vehicles/verify', [VehiclesController::class, 'verify_vehicle'])->name('vehicles.verify');
 
-    // Services
-    Route::get("/services", [ServicesController::class, 'index'])->name("services.all");
-
-    Route::post('/services/store', [ServicesController::class, "store"])->name("services.store");
-
-    Route::get('/services/{service}/edit', [ServicesController::class, "edit"])->name("services.edit");
-
-    Route::put('/services/{id}', [ServicesController::class, "update"])->name("services");
-
-    Route::delete('/services/{service}', [ServicesController::class, "destroy"]);
-
-    // Service Components
-    Route::get("/services/components", [ServicesComponentController::class, 'index'])->name("services_comp.all");
-
-    Route::post('/services/components/store', [ServicesComponentController::class, "store"])->name("services_comp.store");
-
-    Route::get('/services/components/{component}/edit', [ServicesComponentController::class, "edit"])->name("services_comp.edit");
-
-    Route::put('/services/components/{id}', [ServicesComponentController::class, "update"])->name("services_comp");
-
-    Route::delete('/services/components/{component}', [ServicesComponentController::class, "destroy"]);
 
 });
 
