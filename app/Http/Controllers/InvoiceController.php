@@ -22,14 +22,27 @@ class InvoiceController extends Controller
     public function index()
     {
       
-        $invoices = DB::table("invoices")
-            ->join('vehicles', 'invoices.vehicle_id', '=', 'vehicles.id')
-            ->join('services', 'invoices.service_id', '=', 'services.id')
-            ->join('users', 'invoices.created_by', '=', 'users.id')
-            ->select('users.first_name','users.surname', 'invoices.*','services.service_name', 'vehicles.plate_number')
+        $query_data = request()->query();
+
+        $invoices = DB::table("invoices as I")
+            ->join('vehicles as V', 'I.vehicle_id', '=', 'V.id')
+            ->join('services as S', 'I.service_id', '=', 'S.id')
+            ->join('users as U', 'I.created_by', '=', 'U.id')
+            ->select('U.first_name','U.surname', 'I.*','S.service_name', 'V.plate_number')
+            ->when(isset($query_data["status"]), function ($q) use($query_data){
+                return $q->where('I.status', $query_data["status"]);
+            })
+            ->when(isset($query_data["fromDate"]), function ($q) use($query_data){
+                return $q->whereDate('I.created_at', '>=', $query_data["fromDate"], 'and', '<=', $query_data["toDate"]);
+            })
+            ->when(isset($query_data["created_by"]), function ($q) use($query_data){
+                return $q->where('I.created_by', $query_data["created_by"]);
+            })
             ->get();
+
+            $users = DB::table('users')->where('id', '>', 1)->where('role', 2)->select('id','first_name','surname')->get();
         
-            return view('invoices', compact('invoices'));
+            return view('invoices', compact('invoices', 'users'));
     }
 
     /**
@@ -132,7 +145,7 @@ class InvoiceController extends Controller
 
                         // Generate a mapping of service component to the different service Ids
                         // This is will latter help while inserting the different service components as invoice breakdown.
-                        $services_comp["{$servId}"][] = ["service_id"=> $servId, "component_id"=> $cmpId, "title"=>  $queryRes->title, "amount"=> $queryRes->amount];
+                        $services_comp["{$servId}"][] = ["service_id"=> $servId, "component_id"=> $cmpId];
                         
                    }//end components foreach
 
@@ -231,24 +244,8 @@ class InvoiceController extends Controller
 
                 $data["invoice_nos"] = $response->invoice_no;
 
-                $createdBy = auth()->user()->first_name ." ".auth()->user()->surname;
-
                 // Retrieve service's breakdownn using the different service Ids
                 $invoice_breakdown = $services_comp["{$data["service_id"]}"];
-
-                // Generate invoice PDF
-                $pdf = App::make('dompdf.wrapper');
-            
-                $pdf->loadView('pdf.invoice', ["vehicle"=>$vehicle, "invoice_breakdown"=> $invoice_breakdown, "invoice" => ["date_created"=> $data["created_at"], "trans_ref"=> $data["trans_ref"], "agent"=> $createdBy, "status"=> "Unpaid", "service"=> $data["service_name"], "total_amount"=>$response->data[$key]->amount, "invoice_nos"=> $data["invoice_nos"]]]);
-              
-                $content = $pdf->download()->getOriginalContent();
-
-                $filename = uniqid().".pdf";
-
-                // Upload file to invoice folder
-                Storage::disk('local')->put("/invoices/{$filename}",  $content);
-
-                $data["file"] = "invoices/{$filename}";
 
                 $data["created_by"] = auth()->user()->id;
 
@@ -265,8 +262,6 @@ class InvoiceController extends Controller
                 $invoice_breakdown = array_map(function($breakdown) use ($id) {
                     $breakdown["invoice_id"] = $id;
                     $breakdown["created_at"] = now();
-                    unset($breakdown["title"]);
-                    unset($breakdown["amount"]);
                     return $breakdown;
                 }, $invoice_breakdown);
                 
@@ -297,6 +292,7 @@ class InvoiceController extends Controller
     public function showInvoice()
     {
         //Only used for testing purpose
+        // When designing/modiying the invoice
         return view("pdf.invoice");
     }
 
@@ -308,13 +304,29 @@ class InvoiceController extends Controller
         $request->validate(
             ["invoice" => "required|integer"]
         );
-
-        $query = DB::table('invoices')->where('id', $request->invoice);
+        
+        $query = DB::table('invoices as I')->where('I.id', $request->invoice);
 
         if( $query->exists()){
-            $file = $query->value("file");
-            
-            return Storage::download($file);
+           $invoice = $query->join('vehicles as V', 'V.id','=','I.vehicle_id')
+                ->join('users as U','U.id', '=','I.created_by')
+                ->join('services as S', 'S.id','=','I.service_id')
+                ->select('I.*','V.owner_fname','V.owner_surname','V.owner_email','V.owner_phone','V.engine_number','V.owner_license_number', 'V.chassis_number','V.owner_phone','U.first_name','U.surname','S.service_name')
+                ->first();
+            // Get invoice Breakddown
+            $invoice_breakdown = DB::table('invoices_breakdown as I')
+                ->where('I.invoice_id', $request->invoice)
+                ->join('service_components as S', 'S.id','=','I.component_id')
+                ->select('S.amount','S.title')
+                ->get();
+                
+                $pdf = App::make('dompdf.wrapper');
+                
+                $pdf->loadView('pdf.invoice', compact('invoice','invoice_breakdown'));
+                
+                $filename = $invoice->status === "unpaid" ? "invoice.pdf": "receipt.pdf";
+                
+                return $pdf->download("{$filename}");
         }
         return back()->with('error', 'Sorry, an error occured. Please try again latter');
 
@@ -351,5 +363,45 @@ class InvoiceController extends Controller
             
         
         return view("invoiceBreakdown", compact('components', 'invoice'));
+    }
+
+    public function invoice_update (Request $request){
+
+        if($request->has('trans_reference') && ($request->has('status') && strtolower($request->status) === "paid")){
+            // Check whether transf reerence exist and update the update at date
+            $query = DB::table('invoices')->where('trans_ref', $request->trans_reference)->whereNull('updated_at');
+            if($query->exists()){
+                    // Update the invoice status
+                $invoice = $query->first();
+
+                $invoice->updated_at = now();
+
+                $invoice->status = "paid";
+
+                $invoice->save();
+                // Update last renewal date
+                $vehicle = DB::table('vehicles')->where('id', $invoice->vehicle_id)->select('last_renewal_date')->first();
+
+                $vehicle->last_renewal_date == $invoice->updated_at;
+                //   Update the car last renewal date
+                $vehicle->save();
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Invoice updated succesfully',
+                ], 200);
+            }
+
+            return  response()->json([
+                'status'=> "error",
+                'message' => 'Invoice transaction reference not found',
+            ], 404);
+           
+        }
+        return  response()->json([
+            'status'=> "error",
+            'message' => 'No transaction reference and corresponding status',
+        ], 500);
+
     }
 }
