@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreVehicleRequest;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
+use Illuminate\Http\Request;
+use App\Http\Requests\StoreVehicleRequest;
 
 
 class VehiclesController extends Controller
@@ -123,8 +124,8 @@ class VehiclesController extends Controller
     public function verify_vehicle(Request $request)
     {
         $request->validate([
-            "plate_number" => "required|string|max:255|exists:vehicles,plate_number",
-            "license_number"=> "required|string|max:255|exists:vehicles,owner_license_number"
+            "plate_number" => "required|string|max:255",
+            "license_number"=> "required|string|max:255"
         ]);
         //  Double check credentials existence again
         $query = Vehicle::where("plate_number", $request->plate_number)
@@ -136,10 +137,7 @@ class VehiclesController extends Controller
         }
 
         return back()->with('error', 'Vehicle credentials does not exists in the system. Kindly register vehicle');
-
-        // 'agent_id' => 'required|numeric|exists:customer_support_agents,id',
-        // 'agent_pin' => 'required|numeric|min:6',
-        // 'access_token'    => 'required|exists:agent_access_tokens,access_token'
+        
     }
 
 

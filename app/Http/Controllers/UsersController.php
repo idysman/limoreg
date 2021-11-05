@@ -128,7 +128,9 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show (){
+       
+        $user = User::where('id', auth()->user()->id)->select('first_name','surname','middle_name','email','phone', 'role','created_at')->first();
 
-
+       return view('userProfile',compact('user'));
     }
 }

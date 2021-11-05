@@ -154,7 +154,7 @@
                 
                 <div style="background:white" class="col text">
                     <p class="mb-2"><span class="info-head">From</span>: Imo State Government, Nigeria</p>
-                    <p class="mb-2"><span class="info-head">Invoice No</span>: {{ $vehicle->invoice_nos }}</p>
+                    <p class="mb-2"><span class="info-head">Invoice No</span>: {{ $invoice["invoice_nos"] }}</p>
                     <p class="mb-2"><span class="info-head">Created At</span>: {{ $invoice["date_created"] }}</p>
                     <p class="mb-2"><span class="info-head">Transaction Ref. </span>: {{ $invoice["trans_ref"] }}</p>
                     <p class="mb-2"><span class="info-head">Status</span>: {{ $invoice["status"] }}</p>
@@ -179,19 +179,19 @@
                             
                             @foreach ( $invoice_breakdown as $breakdown )
                                 <tr>
-                                    <td>{{ $breakdown->iteration }}</td>
-                                    <td>{{ $breakdown->title }}</td>
-                                    <td>{{ $breakdown->amount }}</td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $breakdown["title"] }}</td>
+                                    <td>{{ $breakdown["amount"] }}</td>
                                 </tr>
                             @endforeach
                             
                             <tr class="total">
                                 <td colspan="2">Sub-total</td>
-                                <td> <del style="text-decoration-style: double;">N</del> {{ $invoice->total_amount }}</td>
+                                <td> <del style="text-decoration-style: double;">N</del> {{ $invoice["total_amount"] }}</td>
                             </tr>
                             <tr class="total">
                                 <td colspan="2">Grand Total</td>
-                                <td> <del style="text-decoration-style: double;">N</del> {{ $invoice->total_amount }}</td>
+                                <td> <del style="text-decoration-style: double;">N</del> {{ $invoice["total_amount"] }}</td>
                             </tr>
                         </tbody>
                     </table>

@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vehicle extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         
@@ -26,6 +27,7 @@ class Vehicle extends Model
         'engine_capacity',
         'tank_capacity',
         'odometer',
+        'created_by',
         'color',
         'fuel_type',
         'year_of_manufacture',
@@ -34,6 +36,8 @@ class Vehicle extends Model
         'owner_identification',
         'identification_no',
         'state',
+        'iirs_id',
+        'tin',
         'lga'
     ];
 }

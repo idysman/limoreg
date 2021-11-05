@@ -18,6 +18,7 @@ class CreateVehicleTypesTable extends Migration
             $table->string("title");
             $table->text("description")->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

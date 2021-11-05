@@ -366,6 +366,35 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-row">
+                        
+                        <div class="col-sm-4">
+                            <div class="form-group mb-4">
+                                <label for="tin">Taxpayer Identification Number</label>
+                                <input type="text" value="{{ old("tin") }}" name="tin" class="form-control @error('tin') is-invalid @enderror" id="tin" placeholder=" Taxpayer Identification Number">
+                                
+                                @error('tin')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-4">
+                            <div class="form-group mb-4">
+                                <label for="title">Imo State Internal Revenue Service Id</label>
+                                <input type="text"  value="{{ old("iirs_id") }}" name="iirs_id" class="form-control @error('address') is-invalid @enderror" id="title" placeholder="Imo State Internal Revenue Service Id" required>
+                                
+                                @error('address')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
                     
                         <small id="emailHelp2" class="form-text text-muted">*Required Fields</small>
                         <div class="form-row m-auto">

@@ -23,9 +23,9 @@
             width:100%;
             display:block;
             padding-left:8px
-
+           
         }
-
+                                                        
     </style>
 @endsection
 
@@ -36,56 +36,38 @@
 
             <div class="page-header">
                 <div class="page-title my-2">
-                    <h3>Manage Vehicles</h3>
+                    <h3>Invoice Preview</h3>
                 </div>
             </div>
-
+            
             <div class="row layout-top-spacing" id="cancel-row">
-
+            
                 <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                     <div class="widget-content widget-content-area br-6">
+                       <div class="my-3 ml-3">
+                       
+                        <h5></h5>
+                       </div>
                         <div class="table-responsive mb-4 mt-4">
                             <table id="html5-extension" class="table table-hover non-hover" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>S/N</th>
-                                        <th>Plate Number</th>
-                                        <th>Model</th>
-                                        <th>Owner Name</th>
-                                        <th>Owner Phone</th>
-                                        <th>Owner Email</th>
-                                        <th>Actions</th>
+                                        <th>Invoice</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($vehicles as $vehicle)
+                                    @forelse ($invoices as $invoice)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $vehicle->plate_number }}</td>
-                                            <td>{{ $vehicle->model }}</td>
-                                            <td>{{ $vehicle->owner_fname . " ".$vehicle->owner_surname }}</td>
-                                            <td>{{ $vehicle->owner_phone }}</td>
-                                            <td>{{ $vehicle->owner_email }}</td>
-
+                                            <td>{{  $invoice['service'].' Invoice' }}</td>
                                             <td>
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-dark btn-sm">Open</button>
-                                                    <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                                    </button>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-                                                        <a class="dropdown-item" href="{{ route('vehicles.edit',$vehicle->id) }}">Edit</a>
-                                                        <a class="dropdown-item" href="{{ route('vehicles',$vehicle->id) }}">View</a>
-                                                        @if (auth()->user()->role === 1)
-                                                            <form  action="{{ route("vehicles", $vehicle->id) }}" method="POST">
-                                                                @csrf
-                                                                @method("DELETE")
-                                                                <input class="form-item" class="dropdown-item" value="Delete" type="submit"/>
-                                                            </form>
-                                                        @endif
-
-                                                    </div>
-                                                </div>
+                                                <form action="{{ route('invoices.download') }}" method="post">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary">Download Invoice</button>
+                                                    <input type="hidden" value="{{ $invoice['invoice_id'] }}" name="invoice"/>
+                                                </form>
                                             </td>
                                         </tr>
                                     @empty
@@ -94,6 +76,7 @@
                                         </td>
                                     </tr>
                                     @endforelse
+                                   
                                 </tbody>
                             </table>
                         </div>
@@ -111,10 +94,10 @@
 
     <!-- NOTE TO Use Copy CSV Excel PDF Print Options You Must Include These Files  -->
     <script src="{{ asset("assets/js/datatable/button-ext/dataTables.buttons.min.js") }}"></script>
-    <script src="{{ asset("assets/js/datatable/button-ext/jszip.min.js") }}"></script>
+    <script src="{{ asset("assets/js/datatable/button-ext/jszip.min.js") }}"></script>    
     <script src="{{ asset("assets/js/datatable/button-ext/buttons.html5.min.js") }}"></script>
     <script src="{{ asset("assets/js/datatable/button-ext/buttons.print.min.js")}}"></script>
-
+    
     <script>
         $('#html5-extension').DataTable( {
             dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5"i><"col-md-7"p>>> >',
@@ -135,7 +118,7 @@
             },
             "stripeClasses": [],
             "lengthMenu": [7, 10, 20, 50],
-            "pageLength": 7
+            "pageLength": 7 
         } );
     </script>
     <!-- END PAGE LEVEL SCRIPTS -->
