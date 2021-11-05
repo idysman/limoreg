@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                             <div class="progress">
-                                <div class="progress-bar bg-gradient-secondary" role="progressbar" style="width: {{ $yourInvoice/$invoices * 100 }}%" aria-valuenow=" {{ $yourInvoice/$invoices * 100 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-gradient-secondary" role="progressbar" style="width: {{ $invoices > 0 ? ($yourInvoice/$invoices * 100) : 0 }}%" aria-valuenow=" {{  $invoices > 0 ? ($yourInvoice/$invoices * 100) : 0  }}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
                     </div>

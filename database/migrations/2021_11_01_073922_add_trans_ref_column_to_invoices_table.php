@@ -15,7 +15,6 @@ class AddTransRefColumnToInvoicesTable extends Migration
     {
         Schema::table('invoices', function (Blueprint $table) {
             $table->string("trans_ref");
-            $table->string("file");
         });
     }
 
@@ -28,7 +27,6 @@ class AddTransRefColumnToInvoicesTable extends Migration
     {
         Schema::table('invoices', function (Blueprint $table) {
             $table->dropColumn("trans_ref");
-            $table->dropColumn("file");
         });
     }
 }
