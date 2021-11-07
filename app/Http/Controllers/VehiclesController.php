@@ -6,7 +6,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleType;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreVehicleRequest;
-
+use App\Models\Owner;
 
 class VehiclesController extends Controller
 {
@@ -42,13 +42,25 @@ class VehiclesController extends Controller
     public function store(StoreVehicleRequest $request)
     {
         //    validated input
-        $vehicle = $request->except(['vehicle_type', '_token']);
+        // $vehicle = $request->except(['vehicle_type', '_token']);
 
-        $vehicle["vehicle_type_id"] = $request->vehicle_type;
 
-        $vehicle["created_by"] = auth()->user()->id;
 
-        Vehicle::create($vehicle);
+        $owner_fields = array_intersect(array_keys($request->all()), app(Owner::class)->getFillable());
+        $owner_data = $request->only($owner_fields);
+        $owner = Owner::create($owner_data);
+
+        $vehicle_fields = array_intersect(array_keys($request->all()), app(Vehicle::class)->getFillable());
+        $vehicle_data = $request->only($vehicle_fields);
+        $vehicle_data["vehicle_type_id"] = $request->vehicle_type;
+
+        $vehicle_data["created_by"] = auth()->user()->id;
+        $vehicle_data["owner_id"] = $owner->id;
+
+
+
+
+        Vehicle::create($vehicle_data);
 
         return back()->with('success', 'Vehicle registered successfully');
     }
@@ -90,13 +102,22 @@ class VehiclesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreVehicleRequest $request, $id)
+    public function update(StoreVehicleRequest $request, $vehicle_id, $owner_id)
     {
+
+        // $vehicle_fields = array_intersect(array_keys($request->all()), app(Vehicle::class)->getFillable());
+        // $vehicle_data = $request->only($vehicle_fields);
+
+        // Vehicle::where('id',$id)->update($vehicle_data);
+
+        $owner_fields = array_intersect(array_keys($request->all()), app(Owner::class)->getFillable());
+        $owner_data = $request->only($owner_fields);
+        Owner::where('id',$owner_id)->update($owner_data);
 
         $vehicle_fields = array_intersect(array_keys($request->all()), app(Vehicle::class)->getFillable());
         $vehicle_data = $request->only($vehicle_fields);
 
-        Vehicle::where('id',$id)->update($vehicle_data);
+        Vehicle::where('id',$vehicle_id)->update($vehicle_data);
 
         return back()->with('success', 'Vehicle updated successfully');
 
@@ -137,7 +158,7 @@ class VehiclesController extends Controller
         }
 
         return back()->with('error', 'Vehicle credentials does not exists in the system. Kindly register vehicle');
-        
+
     }
 
 

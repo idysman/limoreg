@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['is_superAdmin'])->group(function () {
          // Users
         Route::get('/users', [UsersController::class, "index"])->name("users.all");
-        
+
         Route::get('/users/create', [UsersController::class, "create"])->name("users.create");
 
         Route::post('/users/store', [UsersController::class, "store"])->name("users.store");
@@ -96,14 +96,14 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/services/components/{component}', [ServicesComponentController::class, "destroy"]);
 
     });
-    
-    //Invoices 
+
+    //Invoices
     Route::get('invoices/all', [InvoiceController::class, 'index'])->name('invoices.all');
-    
+
     Route::get('/invoices/preview', [InvoiceController::class, 'preview'])->name('invoices.preview');
 
     Route::post('/invoices/download', [InvoiceController::class, 'download'])->name('invoices.download');
-    
+
     Route::get('/invoices/{invoice}/details', [InvoiceController::class, 'invoice_breakdown'])->name("invoices.breakdown");
 
     Route::get('/invoices/{vehicle}/generate', [InvoiceController::class, 'create'])->name("invoice.generate");
@@ -124,12 +124,16 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/vehicles/{vehicle}', [VehiclesController::class, "update"])->name("vehicles");
 
     Route::get('/vehicles/{vehicle}', [VehiclesController::class, "show"]);
-    
+
     // Functionality can only be used by superadmin
     Route::delete('/vehicles/{vehicle}', [VehiclesController::class, "delete"])->middleware('is_superAdmin');
 
     Route::post('/vehicles/verify', [VehiclesController::class, 'verify_vehicle'])->name('vehicles.verify');
 
 
+});
+
+Route::get('/test',function(){
+    return view('test_form');
 });
 

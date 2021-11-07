@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="widget-content widget-content-area">
-                        <form method="POST" action="{{ route("vehicles",$vehicle->id) }}" class="px-4">
+                        <form method="POST" action="{{ route("vehicles",['vehicle_id' => $vehicle->id, 'owner_id' =>$vehicle->owner_id]) }}" class="px-4">
                             @csrf
                             @method('PUT')
                             <div class="form-row">
@@ -368,12 +368,12 @@
                     </div>
 
                     <div class="form-row">
-                        
+
                         <div class="col-sm-4">
                             <div class="form-group mb-4">
                                 <label for="tin">Taxpayer Identification Number</label>
                                 <input type="text" value="{{ $vehicle->tin}}" name="tin" class="form-control @error('tin') is-invalid @enderror" id="tin" placeholder=" Taxpayer Identification Number">
-                                
+
                                 @error('tin')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -381,13 +381,13 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
                         <div class="col-sm-4">
                             <div class="form-group mb-4">
                                 <label for="iirs_id">Imo State Internal Revenue Service Id</label>
-                                
+
                                 <input type="text"  value="{{ $vehicle->iirs_id }}" name="iirs_id" class="form-control @error('address') is-invalid @enderror" id="iirs_id" placeholder="Imo State Internal Revenue Service Id" required>
-                                
+
                                 @error('address')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

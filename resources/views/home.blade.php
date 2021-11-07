@@ -1,3 +1,4 @@
+    {{-- {{ dd($total_invoices) }} --}}
     @extends('layouts.app')
 
     @section("pageStyles")
@@ -144,9 +145,14 @@
 @section('pageScripts')
     <script src="{{ asset("assets/js/apexcharts.min.js") }}"></script>
     <script>
-        const data = 1;
+        // const data = [58, 44, 55, 57, 56, 61, 58, 63, 60, 66, 56, 63];
+        const total_invoices = {{ json_encode($total_invoices) }};
+        const  your_invoices= {{ json_encode($your_invoices) }};
+
+
+        console.log(data);
+
     </script>
     <script src="{{ asset("assets/js/dash_1.js") }}"></script>
 
 @endsection
-    
