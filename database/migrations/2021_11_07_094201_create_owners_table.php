@@ -25,6 +25,7 @@ class CreateOwnersTable extends Migration
             $table->string("state");
             $table->string("lga");
             $table->string("owner_phone");
+            $table->softDeletes();
             $table->timestamps();
         });
     }

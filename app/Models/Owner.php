@@ -16,7 +16,6 @@ class Owner extends Model
         'owner_email',
         'owner_license_number',
         'owner_phone',
-        'title',
         'address',
         'owner_identification',
         'identification_no',

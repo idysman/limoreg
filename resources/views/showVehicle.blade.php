@@ -30,26 +30,26 @@
                         </div>
                         <div class="text-center user-info">
                             <img src="{{ asset('assets/img/car.png') }}" class="px-3" width="150px" alt="avatar">
-                            <p class="">{{ $vehicle->owner_fname." ".$vehicle->owner_surname }}</p>
+                            <p class="">{{ $owner->owner_fname." ".$owner->owner_surname }}</p>
                         </div>
                         <div class="user-info-list">
 
                             <div class="">
                                 <ul class="contacts-block list-unstyled">
                                     <li class="contacts-block__item">
-                                       <strong>ID Type: </strong> {{ $vehicle->owner_identification }}
+                                       <strong>ID Type: </strong> {{ $owner->owner_identification }}
                                     </li>
                                     <li class="contacts-block__item">
-                                        <strong>ID No: </strong> {{ $vehicle->identification_no }}
+                                        <strong>ID No: </strong> {{ $owner->identification_no }}
                                     </li>
                                     <li class="contacts-block__item">
-                                        <strong>Address: </strong>{{ $vehicle->address }}
+                                        <strong>Address: </strong>{{ $owner->address }}
                                     </li>
                                     <li class="contacts-block__item">
-                                        <strong>Email: </strong>{{ $vehicle->owner_email }}</a>
+                                        <strong>Email: </strong>{{ $owner->owner_email }}</a>
                                     </li>
                                     <li class="contacts-block__item">
-                                        <strong>Phone Number: </strong> {{ $vehicle->owner_phone }}
+                                        <strong>Phone Number: </strong> {{ $owner->owner_phone }}
                                     </li>
                                     <li class="contacts-block__item">
                                         <strong>TIN: </strong> {{ $vehicle->tin ?? "" }}

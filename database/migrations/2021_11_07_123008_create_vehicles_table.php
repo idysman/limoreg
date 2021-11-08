@@ -33,8 +33,8 @@ class CreateVehiclesTable extends Migration
             $table->string("year_of_manufacture")->nullable();
             $table->string("title");
             $table->dateTime("last_renewal_date")->nullable();
-            $table->string("trans_ref");
-            $table->string("invoice_nos");
+            $table->string("trans_ref")->nullable();
+            $table->string("invoice_nos")->nullable();
             $table->string("tin")->nullable();
             $table->string("iirs_id")->nullable();
             $table->foreign("owner_id")->references("id")->on("owners");

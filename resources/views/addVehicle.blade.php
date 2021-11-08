@@ -15,6 +15,7 @@
      <link href="{{ asset("assets/css/switches.css") }}" rel="stylesheet" type="text/css" />
      <link href="{{ asset("assets/css/theme-checkbox-radio.css") }}" rel="stylesheet" type="text/css" />
      <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/bootstrap-select.min.css") }}">
+     <link href="{{ asset("assets/css/form_wizard.css") }}" rel="stylesheet" type="text/css" />
      <style>
         * {
             margin: 0;
@@ -281,133 +282,133 @@
                     <div class="widget-content widget-content-area">
                         <form method="POST" action="{{ route("vehicles.store") }}" class="px-4">
                             @csrf
+                            <div class="tab">
+                            <div><h2 class="fs-title">Owner Information</h2></div>
+                            <div class="form-row">
+                            <div class="col-sm-4">
+                                <fieldset>
+                                    <div class="form-group mb-4">
+                                        <label for="owner-fname">Owner first Name</label>
+                                        <input type="text" name="owner_fname" class="form-control @error('owner_fname') is-invalid @enderror" value="{{ old("owner_fname") }}"  id="owner-fname" placeholder="Vehicle owner's first name *" required>
+                                    @error('owner_fname')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mb-4">
+                                        <label for="name">Owner Surname</label>
+                                        <input type="text" name="owner_surname" class="form-control @error('owner_surname') is-invalid @enderror" value="{{ old("owner_surname") }}" id="owner-surname" placeholder="Vehicle owner's surname *" required>
+
+                                    @error('owner_surname')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mb-4">
+                                        <label for="name">Owner License Number</label>
+                                        <input type="text"  name="owner_license_number" class="form-control @error('owner_license_number') is-invalid @enderror"  value="{{ old("owner_license_number") }}" id="owner-license-number" placeholder="Vehicle owner's license Number *" required>
+
+                                    @error('owner_license_number')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-row">
                                 <div class="col-sm-4">
-                                    <div id="owner">
-                                        <fieldset>
-                                            <h2 class="fs-title">Owner Information</h2>
-                                            <div class="form-group mb-4">
-                                                <label for="owner-fname">Owner first Name</label>
-                                                <input type="text" name="owner_fname" class="form-control @error('owner_fname') is-invalid @enderror" value="{{ old("owner_fname") }}"  id="owner-fname" placeholder="Vehicle owner's first name *" required>
-                                            @error('owner_fname')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-4">
-                                                <label for="name">Owner Surname</label>
-                                                <input type="text" name="owner_surname" class="form-control @error('owner_surname') is-invalid @enderror" value="{{ old("owner_surname") }}" id="owner-surname" placeholder="Vehicle owner's surname *" required>
+                                    <div class="form-group mb-4">
+                                        <label for="name">Owner's Email</label>
+                                        <input type="text" name="owner_email" value="{{ old("owner_email") }}" class="form-control @error('owner_email') is-invalid @enderror"  id="owner-email" placeholder="Vehicle owner's email *" required>
 
-                                            @error('owner_surname')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-4">
-                                                <label for="name">Owner License Number</label>
-                                                <input type="text"  name="owner_license_number" class="form-control @error('owner_license_number') is-invalid @enderror"  value="{{ old("owner_license_number") }}" id="owner-license-number" placeholder="Vehicle owner's license Number *" required>
-
-                                            @error('owner_license_number')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                            </div>
-                                        </div>
+                                    @error('owner_email')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                     </div>
-                                    <div class="form-row">
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-4">
-                                                <label for="name">Owner's Email</label>
-                                                <input type="text" name="owner_email" value="{{ old("owner_email") }}" class="form-control @error('owner_email') is-invalid @enderror"  id="owner-email" placeholder="Vehicle owner's email *" required>
+                                </div>
 
-                                            @error('owner_email')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                            </div>
-                                        </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mb-4">
+                                        <label for="name">Owner's Phone Number</label>
+                                        <input type="text"  value="{{ old("owner_phone") }}" name="owner_phone" class="form-control @error('owner_phone') is-invalid @enderror"  id="owner-phone" placeholder="Vehicle owner's phone Number *" required>
 
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-4">
-                                                <label for="name">Owner's Phone Number</label>
-                                                <input type="text"  value="{{ old("owner_phone") }}" name="owner_phone" class="form-control @error('owner_phone') is-invalid @enderror"  id="owner-phone" placeholder="Vehicle owner's phone Number *" required>
-
-                                            @error('owner_phone')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-4">
-                                                <label for="name">Owner's Identification</label>
-                                                  <select  name="owner_identification" class="form-control @error('owner_identification') is-invalid @enderror">
-                                                    <option>Voter's Card</option>
-                                                    <option>National Identification Numbr</option>
-                                                  </select>
-                                                  @error('owner_identification')
-                                                  <span class="invalid-feedback" role="alert">
-                                                      <strong>{{ $message }}</strong>
-                                                  </span>
-                                              @enderror
-                                            </div>
-                                        </div>
+                                    @error('owner_phone')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                     </div>
+                                </div>
 
-                                    <div class="form-row">
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-4">
-                                                <label for="name">Identification Number</label>
-                                                <input type="text" name="identification_no" class="form-control @error('identification_no') is-invalid @enderror"  value="{{ old("identification_no") }}" id="identification-no" placeholder="Owner's identification Number *" required>
-
-                                                @error('identification_no')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-4">
-                                                <label for="name">Owner's State of Origin</label>
-                                                <input type="text" name="state" class="form-control @error('state') is-invalid @enderror"   value="{{ old("state") }}" id="state" placeholder="Owner's State *" required>
-
-                                                @error('state')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-4">
-                                                <label for="name">Owner's LGA</label>
-                                                <input type="text" name="lga" class="form-control @error('lga') is-invalid @enderror" value="{{ old("lga") }}" id="state" placeholder="Owner's LGA *" required>
-
-                                                @error('lga')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mb-4">
+                                        <label for="name">Owner's Identification</label>
+                                          <select  name="owner_identification" class="form-control @error('owner_identification') is-invalid @enderror">
+                                            <option>Voter's Card</option>
+                                            <option>National Identification Numbr</option>
+                                          </select>
+                                          @error('owner_identification')
+                                          <span class="invalid-feedback" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                      @enderror
                                     </div>
-                                </fieldset>
+                                </div>
+                            </div>
 
-                             </div>
-                             <div id="vehicle">
+                            <div class="form-row">
+                                <div class="col-sm-4">
+                                    <div class="form-group mb-4">
+                                        <label for="name">Identification Number</label>
+                                        <input type="text" name="identification_no" class="form-control @error('identification_no') is-invalid @enderror"  value="{{ old("identification_no") }}" id="identification-no" placeholder="Owner's identification Number *" required>
+
+                                        @error('identification_no')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group mb-4">
+                                        <label for="name">Owner's State of Origin</label>
+                                        <input type="text" name="state" class="form-control @error('state') is-invalid @enderror"   value="{{ old("state") }}" id="state" placeholder="Owner's State *" required>
+
+                                        @error('state')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group mb-4">
+                                        <label for="name">Owner's LGA</label>
+                                        <input type="text" name="lga" class="form-control @error('lga') is-invalid @enderror" value="{{ old("lga") }}" id="state" placeholder="Owner's LGA *" required>
+
+                                        @error('lga')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                            </div>
+                            <div class="tab">
                                 <fieldset>
                                     <h2 class="fs-title">Vehicle Information</h2>
                                     <div class="form-row">
@@ -642,14 +643,29 @@
                                     </div>
                                 </div>
                                 </fieldset>
+                                <div class="form-row m-auto">
+                                    <button type="submit" class="btn btn-primary my-4 w-50 py-3 ">Register Car</button>
+                                </div>
                             </div>
 
                     </div>
 
-                        <small id="emailHelp2" class="form-text text-muted">*Required Fields</small>
-                        <div class="form-row m-auto">
-                            <button type="submit" class="btn btn-primary my-4 w-50 py-3 ">Register Car</button>
+                        <small id="emailHelp2" class="form-text text-muted" style="padding: 20px">*Required Fields</small>
+
+                        <div style="overflow:auto;">
+                            <div style="float:right;">
+                              <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                              <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                            </div>
                         </div>
+
+                        <div style="text-align:center;margin-top:40px;padding:40px;">
+                            <span class="step"></span>
+                            <span class="step"></span>
+                        </div>
+
+
+
                         </form>
                     </div>
                 </div>
@@ -666,7 +682,7 @@
     <script src="{{ asset("assets/js/scrollspyNav.js") }}"></script>
     <script src="{{ asset("assets/js/bootstrap-select.min.js") }}"></script>
     <script src="{{ asset("assets/js/ui-accordions.js") }}"></script>
-    <script src="{{ asset("assets/js/form_control") }}"></script>
+    <script src="{{ asset("assets/js/form_control.js") }}"></script>
 
     <!-- END PAGE LEVEL SCRIPTS -->
 

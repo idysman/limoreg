@@ -40,14 +40,14 @@
                         </div>
                     </div>
                     <div class="widget-content widget-content-area">
-                        <form method="POST" action="{{ route("vehicles",['vehicle_id' => $vehicle->id, 'owner_id' =>$vehicle->owner_id]) }}" class="px-4">
+                        <form method="POST" action="{{ route("vehicles",$vehicle->id) }}" class="px-4">
                             @csrf
                             @method('PUT')
                             <div class="form-row">
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
                                         <label for="owner-fname">Owner first Name</label>
-                                        <input type="text" name="owner_fname" class="form-control @error('owner_fname') is-invalid @enderror" value="{{ $vehicle->owner_fname }}"  id="owner-fname" placeholder="Vehicle owner's first name *" required>
+                                        <input type="text" name="owner_fname" class="form-control @error('owner_fname') is-invalid @enderror" value="{{ $owner->owner_fname }}"  id="owner-fname" placeholder="Vehicle owner's first name *" required>
                                     @error('owner_fname')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -58,7 +58,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
                                         <label for="name">Owner Surname</label>
-                                        <input type="text" name="owner_surname" class="form-control @error('owner_surname') is-invalid @enderror" value="{{ $vehicle->owner_surname }}" id="owner-surname" placeholder="Vehicle owner's surname *" required>
+                                        <input type="text" name="owner_surname" class="form-control @error('owner_surname') is-invalid @enderror" value="{{ $owner->owner_surname }}" id="owner-surname" placeholder="Vehicle owner's surname *" required>
 
                                     @error('owner_surname')
                                         <span class="invalid-feedback" role="alert">
@@ -70,7 +70,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
                                         <label for="name">Owner License Number</label>
-                                        <input type="text"  name="owner_license_number" class="form-control @error('owner_license_number') is-invalid @enderror"  value="{{ $vehicle->owner_license_number }}" id="owner-license-number" placeholder="Vehicle owner's license Number *" required>
+                                        <input type="text"  name="owner_license_number" class="form-control @error('owner_license_number') is-invalid @enderror"  value="{{ $owner->owner_license_number }}" id="owner-license-number" placeholder="Vehicle owner's license Number *" required>
 
                                     @error('owner_license_number')
                                         <span class="invalid-feedback" role="alert">
@@ -84,7 +84,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
                                         <label for="name">Owner's Email</label>
-                                        <input type="text" name="owner_email" value="{{ $vehicle->owner_email }}" class="form-control @error('owner_email') is-invalid @enderror"  id="owner-email" placeholder="Vehicle owner's email *" required>
+                                        <input type="text" name="owner_email" value="{{ $owner->owner_email }}" class="form-control @error('owner_email') is-invalid @enderror"  id="owner-email" placeholder="Vehicle owner's email *" required>
 
                                     @error('owner_email')
                                         <span class="invalid-feedback" role="alert">
@@ -97,7 +97,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
                                         <label for="name">Owner's Phone Number</label>
-                                        <input type="text"  value="{{ $vehicle->owner_phone }}" name="owner_phone" class="form-control @error('owner_phone') is-invalid @enderror"  id="owner-phone" placeholder="Vehicle owner's phone Number *" required>
+                                        <input type="text"  value="{{ $owner->owner_phone }}" name="owner_phone" class="form-control @error('owner_phone') is-invalid @enderror"  id="owner-phone" placeholder="Vehicle owner's phone Number *" required>
 
                                     @error('owner_phone')
                                         <span class="invalid-feedback" role="alert">
@@ -127,7 +127,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
                                         <label for="name">Identification Number</label>
-                                        <input type="text" name="identification_no" class="form-control @error('identification_no') is-invalid @enderror"  value="{{ $vehicle->identification_no }}" id="identification-no" placeholder="Owner's identification Number *" required>
+                                        <input type="text" name="identification_no" class="form-control @error('identification_no') is-invalid @enderror"  value="{{ $owner->identification_no }}" id="identification-no" placeholder="Owner's identification Number *" required>
 
                                         @error('identification_no')
                                             <span class="invalid-feedback" role="alert">
@@ -140,7 +140,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
                                         <label for="name">Owner's State of Origin</label>
-                                        <input type="text" name="state" class="form-control @error('state') is-invalid @enderror"   value="{{ $vehicle->state }}" id="state" placeholder="Owner's State *" required>
+                                        <input type="text" name="state" class="form-control @error('state') is-invalid @enderror"   value="{{ $owner->state }}" id="state" placeholder="Owner's State *" required>
 
                                         @error('state')
                                             <span class="invalid-feedback" role="alert">
@@ -153,7 +153,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
                                         <label for="name">Owner's LGA</label>
-                                        <input type="text" name="lga" class="form-control @error('lga') is-invalid @enderror" value="{{ $vehicle->lga }}" id="state" placeholder="Owner's LGA *" required>
+                                        <input type="text" name="lga" class="form-control @error('lga') is-invalid @enderror" value="{{ $owner->lga }}" id="state" placeholder="Owner's LGA *" required>
 
                                         @error('lga')
                                             <span class="invalid-feedback" role="alert">

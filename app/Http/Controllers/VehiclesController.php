@@ -74,8 +74,9 @@ class VehiclesController extends Controller
     public function show($id)
     {
         $vehicle_data = Vehicle::where('id', $id)->first();
+        $owner_data = Owner::where('id',$vehicle_data->owner_id)->first();
 
-        return view('showVehicle',['vehicle' => $vehicle_data]);
+        return view('showVehicle',['vehicle' => $vehicle_data, 'owner' => $owner_data]);
     }
 
     /**
@@ -88,10 +89,13 @@ class VehiclesController extends Controller
     {
         $vehicle_types = VehicleType::all();
         $vehicle_data = Vehicle::where('id',$vehicle)->first();
+        $owner_data = Owner::where('id',$vehicle_data->owner_id)->first();
+
 
         return view('editVehicle', [
             'vehicle' => $vehicle_data,
-            'vehicle_types' => $vehicle_types
+            'vehicle_types' => $vehicle_types,
+            'owner' => $owner_data
         ]);
     }
 
@@ -102,22 +106,23 @@ class VehiclesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreVehicleRequest $request, $vehicle_id, $owner_id)
+    public function update(StoreVehicleRequest $request, $vehicle_id)
     {
 
         // $vehicle_fields = array_intersect(array_keys($request->all()), app(Vehicle::class)->getFillable());
         // $vehicle_data = $request->only($vehicle_fields);
 
         // Vehicle::where('id',$id)->update($vehicle_data);
-
-        $owner_fields = array_intersect(array_keys($request->all()), app(Owner::class)->getFillable());
-        $owner_data = $request->only($owner_fields);
-        Owner::where('id',$owner_id)->update($owner_data);
-
         $vehicle_fields = array_intersect(array_keys($request->all()), app(Vehicle::class)->getFillable());
         $vehicle_data = $request->only($vehicle_fields);
 
         Vehicle::where('id',$vehicle_id)->update($vehicle_data);
+
+        $owner_id = Vehicle::where('id',$vehicle_id)->first()->owner_id;
+
+        $owner_fields = array_intersect(array_keys($request->all()), app(Owner::class)->getFillable());
+        $owner_data = $request->only($owner_fields);
+        Owner::where('id',$owner_id)->update($owner_data);
 
         return back()->with('success', 'Vehicle updated successfully');
 
