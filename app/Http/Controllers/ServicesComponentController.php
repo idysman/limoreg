@@ -14,15 +14,18 @@ class ServicesComponentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($service_id = null)
     {
         //Eager load resource with its relationship
-        $components = ServiceComponent::with(["vehicle_type", "service"])->get();
-        
+        $components = ServiceComponent::when($service_id, function($query) use ($service_id){
+                                return $query->where('service_id',$service_id);
+                            })
+                        ->with(["vehicle_type", "service"])->get();
+
         $vehicle_types = VehicleType::all();
-        
+
         $services = Service::all();
-        
+
         return view('serviceComponents', ["components"=> $components, "services"=> $services, "vehicle_types"=> $vehicle_types]);
     }
 
@@ -41,7 +44,7 @@ class ServicesComponentController extends Controller
             "service"=>'required|integer',
             "amount"=> 'required|integer'
         ]);
-        
+
         $component = [
             "title" => $request->title,
             "vehicle_type_id"=> $request->vehicle_type,
@@ -72,14 +75,14 @@ class ServicesComponentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(ServiceComponent $component)
-    
+
     {
         $vehicle_types = VehicleType::all();
-        
+
         $services = Service::all();
-        
+
         return view('editServiceComponents', ["component"=> $component, "services"=> $services, "vehicle_types"=> $vehicle_types]);
-      
+
     }
 
     /**
@@ -121,7 +124,7 @@ class ServicesComponentController extends Controller
     public function destroy( ServiceComponent $component)
     {
         $component->delete();
-        
+
         return back()->with('success', 'Service component deleted succesfully');
     }
 }

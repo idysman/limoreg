@@ -85,7 +85,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/services/{service}', [ServicesController::class, "destroy"]);
 
         // Service Components
-        Route::get("/services/components", [ServicesComponentController::class, 'index'])->name("services_comp.all");
+        Route::get("/services/components/{service_id?}", [ServicesComponentController::class, 'index'])->name("services_comp.all");
 
         Route::post('/services/components/store', [ServicesComponentController::class, "store"])->name("services_comp.store");
 
