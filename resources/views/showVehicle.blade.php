@@ -69,7 +69,10 @@
 
                 <div class="bio layout-spacing ">
                     <div class="widget-content widget-content-area">
+                       <div class="d-flex justify-content-between">
                         <h3 class="">Car Details</h3>
+                        <div><a href="{{ route('invoice.generate', $vehicle->id) }}" class="btn btn-primary">Generate Invoice</a></div>
+                       </div>
 
                         <table id="html5-extension" class="table table-hover non-hover" style="width:100%">
                             <thead>

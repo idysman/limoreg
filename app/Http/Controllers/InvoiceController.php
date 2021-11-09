@@ -250,7 +250,8 @@ class InvoiceController extends Controller
                 $data["created_by"] = auth()->user()->id;
 
                 // Store Items to be rendered on preview page
-                $invoice_preview[] = ["service"=> $data["service_name"]];
+                
+                // $invoice_preview[] = ["service"=> $data["service_name"]];
 
                 // Service name not relevant while inserting invoice
                 unset($data["service_name"]);
@@ -265,14 +266,16 @@ class InvoiceController extends Controller
                     return $breakdown;
                 }, $invoice_breakdown);
                 
-                $invoice_preview[$key]["invoice_id"] = $id; //Track invoice Id also. Will be used in the invoice preview page
+                // $invoice_preview[$key]["invoice_id"] = $id; //Track invoice Id also. Will be used in the invoice preview page
                 //  Finally, store invoice breakdown
                 DB::table('invoices_breakdown')->insert($invoice_breakdown);
                
             }
 
             // Flash invoice preview data into sesssion 
-            $request->session()->flash('preview_invoices', $invoice_preview);
+            // $request->session()->flash('preview_invoices', $invoice_preview);
+            
+            $request->session()->flash('preview_invoice', $response->invoice_no);
             
             // Operation is successful, Redirect to invoice preview page to render generated invoices.
             return redirect()->route('invoices.preview');
@@ -293,7 +296,90 @@ class InvoiceController extends Controller
     {
         //Only used for testing purpose
         // When designing/modiying the invoice
-        return view("pdf.invoice");
+        
+        // Dummy data 
+        $invoice_metadata = (object) array(
+            "invoice_nos" => "INVR61842C78BBBD2920",
+            "owner_fname" =>"Jenkins",
+            "owner_surname" =>"Jemmy",
+            "owner_email" =>"jenkinsme@email.com",
+            "owner_phone"=> "08899456783",
+            "engine_number" => "123456rty",
+            "owner_license_number" => "12346YRU",
+            "chassis_number" => "4567tyui",
+            "first_name" => "System",
+            "surname" => "SuperAdmin",
+            "plate_number" => "1234567tythtg",
+            "created_at" => "2012-12-2013",
+            "status"=> "unpaid",
+            "total_amount"=> "30000" //remove this latter
+        );
+
+
+        $invoices = [
+            (object) array(
+                "status"=> "unpaid",
+                "id"=> 1,
+                "amount"=> "1050",
+                "trans_ref"=>"MNTAR0059LY911XKGW9T33",
+                "service_name" => "Vehicle Renewal"
+            ),
+            (object) array(
+                "status"=> "unpaid",
+                "id"=> 2,
+                "amount"=> "1100",
+                "trans_ref"=>"MNTAR0059LY911XKGW9T33",
+                "service_name" => "Mobile Plate"
+            ),
+        ];
+
+        $invoice_details = [ 
+            (object) array (
+                "amount"=> 450,
+                "title"=> "SMS Alert",
+                "invoice_id"=> 1,
+            ),
+            (object) array(
+                "amount"=> 200,
+                "title" => "Check Fee",
+                "invoice_id"=> 1,
+            ),
+            (object) array(
+                "amount"=> 200,
+                "title" => "Classic Newman",
+                "invoice_id"=> 1,
+            ),
+            (object) array(
+                "amount"=> 200,
+                "title" => "Entropy Version",
+                "invoice_id"=> 1,
+            ),
+
+            (object) array(
+                "amount"=> 200,
+                "title" => "SMS Alert",
+                "invoice_id"=> 2,
+            ),
+            (object) array(
+                "amount"=> 500,
+                "title" => "Vehicle Badge",
+                "invoice_id"=> 2,
+            ),
+            (object) array(
+                "amount"=> 200,
+                "title" => "Driver's Badge",
+                "invoice_id"=> 2,
+            ),
+            (object) array(
+                "amount"=> 200,
+                "title" => "Conductor's Badge",
+                "invoice_id"=> 2,
+            ),
+        ];
+
+        // dd($invoice_breakdown[0]->title);
+        
+        return view("pdf.invoice", compact('invoices','invoice_metadata','invoice_details'));
     }
 
      /**
@@ -302,33 +388,44 @@ class InvoiceController extends Controller
     public function download(Request $request){
 
         $request->validate(
-            ["invoice" => "required|integer"]
+            ["invoice" => "required|string"]
         );
         
-        $query = DB::table('invoices as I')->where('I.id', $request->invoice);
+        $query = DB::table('invoices as I')->where('I.invoice_nos', $request->invoice);
 
-        if( $query->exists()){
-           $invoice = $query->join('vehicles as V', 'V.id','=','I.vehicle_id')
-                ->join('users as U','U.id', '=','I.created_by')
-                ->join('services as S', 'S.id','=','I.service_id')
-                ->select('I.*','V.owner_fname','V.owner_surname','V.owner_email','V.owner_phone','V.engine_number','V.owner_license_number', 'V.chassis_number','V.owner_phone','U.first_name','U.surname','S.service_name')
-                ->first();
-            // Get invoice Breakddown
-            $invoice_breakdown = DB::table('invoices_breakdown as I')
-                ->where('I.invoice_id', $request->invoice)
-                ->join('service_components as S', 'S.id','=','I.component_id')
-                ->select('S.amount','S.title')
+        if($query->exists()){
+            $invoice_metadata = $query->join('vehicles as V', 'V.id','=','I.vehicle_id')
+            ->join('users as U','U.id', '=','I.created_by')
+            ->select('V.owner_fname','V.owner_surname','V.owner_email','V.owner_phone','V.engine_number','V.owner_license_number','V.plate_number','I.created_at', 'V.chassis_number','V.owner_phone','U.first_name','U.surname','I.invoice_nos')
+            ->first();
+
+            // Calculate total amount
+            $invoice_metadata-> total_amount = DB::table('invoices as I')->where('I.invoice_nos', $request->invoice)->sum('amount');
+
+            $invoices = DB::table('invoices as I')->where('I.invoice_nos', $request->invoice)
+            ->join('services as S', 'S.id','=','I.service_id')
+            ->select('I.*','S.service_name')
+            ->get();
+            //Get invoice Breakdown
+            $invoice_details = DB::table('invoices_breakdown as IB')
+                ->join('invoices as I', 'I.id','=','IB.invoice_id')
+                ->join('service_components as S', 'S.id','=','IB.component_id')
+                ->where('I.invoice_nos', $request->invoice)
+                ->select('Ib.invoice_id','S.amount','S.title')
                 ->get();
-                
+
                 $pdf = App::make('dompdf.wrapper');
                 
-                $pdf->loadView('pdf.invoice', compact('invoice','invoice_breakdown'));
+                $pdf->loadView('pdf.invoice', compact('invoice_metadata','invoices','invoice_details'));
+                // $pdf->loadView('pdf.invoice');
                 
-                $filename = $invoice->status === "unpaid" ? "invoice.pdf": "receipt.pdf";
+                // $filename = $invoice->status === "unpaid" ? "invoice.pdf": "receipt.pdf";
+                $filename =  "invoice{$request->invoice}.pdf";
                 
                 return $pdf->download("{$filename}");
         }
-        return back()->with('error', 'Sorry, an error occured. Please try again latter');
+        // return back()->with('error', 'Sorry, an error occured. Please try again latter');
+        return redirect()->route('invoices.all');
 
     }
 
@@ -338,13 +435,13 @@ class InvoiceController extends Controller
      * */   
     public function preview(){
     //   Check whether  the required parameters are persisted in session
-        if(!session("preview_invoices")){
+        if(!session("preview_invoice")){
             return back()->with("error", "No invoice is selected. Kindly select an invoice from the invoice page");
       }
    
-      $invoices = session("preview_invoices");
+      $invoice = session("preview_invoice");
       
-      return view('invoicePreview', compact('invoices'));
+      return view('invoicePreview', compact('invoice'));
     }
 
     /***
@@ -367,24 +464,20 @@ class InvoiceController extends Controller
 
     public function invoice_update (Request $request){
 
-        if($request->has('trans_reference') && ($request->has('status') && strtolower($request->status) === "paid")){
+        $ref = $request->trans_reference;
+        
+        $status = $request->status;
+
+        if($request->has('trans_reference') && $request->has('status') && strtolower($status) === "paid"){
             // Check whether transf reerence exist and update the update at date
-            $query = DB::table('invoices')->where('trans_ref', $request->trans_reference)->whereNull('updated_at');
+            $query = DB::table('invoices')->where('trans_ref',   $ref)->whereNull('updated_at');
             if($query->exists()){
-                    // Update the invoice status
-                $invoice = $query->first();
+                // Update the invoice status
+               $query->update(["updated_at" => now(), "status"=> "paid"]);
 
-                $invoice->updated_at = now();
-
-                $invoice->status = "paid";
-
-                $invoice->save();
+                $invoice =  DB::table('invoices')->where('trans_ref', $ref)->select('vehicle_id','updated_at')->first();
                 // Update last renewal date
-                $vehicle = DB::table('vehicles')->where('id', $invoice->vehicle_id)->select('last_renewal_date')->first();
-
-                $vehicle->last_renewal_date == $invoice->updated_at;
-                //   Update the car last renewal date
-                $vehicle->save();
+                $vehQuery = DB::table('vehicles')->where('id', $invoice->vehicle_id)->update(['last_renewal_date'=> $invoice->updated_at]);
 
                 return response()->json([
                     'status' => 'success',
@@ -393,7 +486,7 @@ class InvoiceController extends Controller
             }
 
             return  response()->json([
-                'status'=> "error",
+                'status'=> 'error',
                 'message' => 'Invoice transaction reference not found',
             ], 404);
            

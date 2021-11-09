@@ -70,7 +70,6 @@ var App = function() {
                     }
 
                 } else  {
-                    console.log('main2');
                     $(Selector.mainContainer).toggleClass("sidebar-closed");
                     $(Selector.mainContainer).toggleClass("sbar-open");
                     if (window.innerWidth <= 991) {
@@ -160,11 +159,6 @@ var App = function() {
                     }
 
                     getElement.className += " show";
-
-
-                    console.log(this.querySelectorAll('.menu-toggle')[0].getAttribute('href'));
-                    console.log(getHref);
-                    console.log(document.querySelectorAll('#compact_submenuSidebar > ' + getHref)[0])
                 })
                 getMenu[i].addEventListener('click', function(ev) {
                     ev.preventDefault();

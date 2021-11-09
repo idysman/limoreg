@@ -26,7 +26,20 @@
                 title: 'Success!',
                 text: "{{ session('success') }}",
                 type: 'success',
-                padding: '2em'
+                showCloseButton: true,
+                @if (session('link'))
+                    showCancelButton: true,
+                    focusConfirm: false,
+                    confirmButtonText:"{{ session('link_text') }}",
+                    confirmButtonAriaLabel: 'Generate Invoice!',
+                    cancelButtonText:'Close',
+                    cancelButtonAriaLabel: 'Close Button',
+                @endif
+                padding: '2em',
+            }).then(function(result) {
+                if (result.value) {
+                  window.location = "{{ session('link') }}" 
+                }
             })
         @endif
 
@@ -63,6 +76,7 @@
     </script>
 
     @yield('pageScripts')
-
+    
+    @livewireScripts
 </body>
 </html>

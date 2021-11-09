@@ -130,7 +130,7 @@
                                                     <form action="{{ route('invoices.download') }}" method="post">
                                                         @csrf
                                                         <button  class="form-item" type="submit">{{ $invoice->status === "unpaid" ? "Download Invoice":"Download Receipt" }}</button>
-                                                        <input type="hidden" value="{{ $invoice->id }}" name="invoice"/>
+                                                        <input type="hidden" value="{{ $invoice->invoice_nos }}" name="invoice"/>
                                                     </form>
                                                     {{-- <a  href="#">Download</a> --}}
                                                     {{--  Storage::download($invoice->file) --}}

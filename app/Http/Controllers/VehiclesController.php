@@ -48,9 +48,9 @@ class VehiclesController extends Controller
 
         $vehicle["created_by"] = auth()->user()->id;
 
-        Vehicle::create($vehicle);
+        $vehicle = Vehicle::create($vehicle);
 
-        return back()->with('success', 'Vehicle registered successfully');
+        return back()->with(['success'=>'Vehicle registered successfully. Click the button below to generate invoice for the vehicle', 'link'=> route('invoice.generate', $vehicle->id), 'link_text'=> 'Proceed to Invoice generation']);
     }
 
     /**
@@ -123,6 +123,7 @@ class VehiclesController extends Controller
      */
     public function verify_vehicle(Request $request)
     {
+    //    You can remove this latter
         $request->validate([
             "plate_number" => "required|string|max:255",
             "license_number"=> "required|string|max:255"
@@ -139,6 +140,5 @@ class VehiclesController extends Controller
         return back()->with('error', 'Vehicle credentials does not exists in the system. Kindly register vehicle');
         
     }
-
 
 }

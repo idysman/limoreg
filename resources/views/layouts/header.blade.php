@@ -22,7 +22,8 @@
     <!-- END GLOBAL MANDATORY STYLES -->
 
     @yield("pageStyles")
-
+    
+    @livewireStyles
 </head>
 <body class="dashboard-analytics">
 

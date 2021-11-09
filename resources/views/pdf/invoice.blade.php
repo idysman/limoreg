@@ -1,3 +1,8 @@
+@php
+// Loop counter
+    $counter = 1;
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,82 +17,100 @@
             margin:0;
             padding:0;
         }
-
-        body{
-            width: 100%;
-            height: 100%;
-        }
-
         
+    body{
+        /* padding : 0 30px 0 30px; */
+        
+        background: url('data:image/jpeg;base64,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');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        position:relative;
+        overflow-x: hidden
+    }
+    
+    body::before{
+        content:"";
+        width:100%;
+        height:100%;
+        background: rgba(255, 255, 255, 0.877);;
+        position:absolute;
+        top:0;
+        right:0;
+        left:0;
+        bottom:0;
+        z-index: -1;
+    }
+        
+    .logo{
+        width:80px;
+        height:80px;
+        color:#000;
+        border-radius: 5px;
+    }
 
-        .logo{
-            width:80px;
-            height:80px;
-            color:#000;
-            border-radius: 5px;
-        }
+    .col-container{
+        display: table;
+        width: 100%;
+        font-size:2rem;
+    }
 
-        .col-container{
-            display: table;
-            width: 100%;
-            font-size:2rem;
-        }
+    .col {
+        display: table-cell;
+        padding: 30px;
+        font-size:20px;
+    }
+    #metadata{
+        margin: 20px auto;
+        width:95%;
+    }
 
-        .col {
-            display: table-cell;
-            padding: 30px;
-            font-size:20px;
-        }
-        .text{
-            font-size:18px;
-        }
-        .mb-2{
-            margin-bottom:10px;
-        }
-        .mb-3{
-            margin-bottom:5px;
-        }
+    #metadata td, #metadata th{
+        border-collapse: collapse;
+        font-size: 18px;
+      
+    }
 
-        .mb-5{
-            margin-bottom:20px;
-        }
+    #metadata tr td:last-child{
+        border-bottom: none;
+    }
 
-        .heading-title{
-            font-size:25px;
-            color:brown;
-            font-weight: bolder;
-        }
+    #invoice-body {
+        width:95%;
+        font-size:20px;
+        margin: auto;
+        border:1px solid #000!important;
+        border-collapse: collapse;
+    }
 
-        .col p {
-            font-size: 1rem;
-        }
+    #invoice-body thead{
+        background:#eee;
+    }
+    #invoice-body td ,  #invoice-body th{
+        padding:3px;
+        text-align: left;
+        border:1px solid #000;
+    }
 
-        .info-head{
-            font-weight:bolder;
-        }
+    #invoice-body table {
+        width: 100%;
+        font-size:16px;
+        border-collapse: collapse;
+        font-weight:bolder;
+    }
 
-        table{
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid #eef;
-            
-        }
-        table thead {
-            background:#f1f2f3;
-        }
+    #invoice-body table td,  #invoice-body table th {
+        text-align: left!important;
+        border-bottom: 1px solid #000!important;
+        border-top: none!important;
+        border-right: none!important;
+        border-left: none!important;
+    }
 
-        td {
-            padding: 0.4em;
-            border-bottom: 1px solid #eef;
-        }
-
-        .total{
-            background:#FAFAFA;
-            font-weight:bolder;
-        }
-
-
-
+    .weight-bold{
+        font-weight:bolder;
+    }
+        
 
     </style>
 
@@ -95,7 +118,7 @@
 
     <div class="invoice-00002">
 
-        <div class="col-container mb-5">
+        <div class="col-container" style="margin-bottom:10px;">
             <div class="col">
               <div class="logo" style="display: inline-block">
                 <img src="data:image/jpeg;base64,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" alt="" srcset="">
@@ -107,101 +130,140 @@
               
             </div>
 
-            <div style="background:white" class="col"></div>
-            <div style="background:white" class="col"></div>
-            <div style="background:white" class="col"></div>
-            <div style="background:white" class="col"></div>
+            <div style="background:white  z-index:-1" class="col"></div>
+            <div style="background:white  z-index:-1" class="col"></div>
             
             <div class="col text">
-             <p>6 Okigwe Rd, opp. Civil Defense Corps Office, Owerri</p>
+             <p>6 Okigwe Rd, Opp. Civil Defense Corps Office, Owerri</p>
              <p>PMB:  460108</p>
              <p>https://iirs.im.gov.ng</p>
              <p>info@birs.bu.gov.ng</p>
             </div>
           </div>
+          
+        <div class="col-container" style="margin-bottom:2px;">
+            <div class="col">
+              <h4 style="font-size:30px; color:rgb(99, 6, 6);">Invoice</h4>
+              
+            </div>
 
-          <div class="col-container">
-                <div class="col">
-                    <div style="margin:0" class="heading-title">
-                        {{ $invoice->status === "unpaid"? "Invoice":"Receipt" }}:
-                    </div>
-                </div>
-
-                <div style="background:white" class="col"></div>
-                <div style="background:white" class="col"></div>
-                <div style="background:white" class="col"></div>
-                <div style="background:white" class="col"></div>
+            <div style="background:white  z-index:-1" class="col"></div>
+            <div style="background:white  z-index:-1" class="col"></div>
+            
+            {{-- <div class="col text">
+            
+            </div> --}}
+          </div>
+          <table id="metadata">
+            <tbody>
+                <tr>
+                    <td class="weight-bold">Owner's Name: </td>
+                    <td>{{ $invoice_metadata->owner_fname." ".$invoice_metadata->owner_surname }}</td>
+                    <td colspan="20"></td>
+                    <td class="weight-bold">From:</td>
+                    <td>Imo State Government, Nigeria</td>
+    
+                </tr>
+                <tr>
+                    <td class="weight-bold">Owner's Email: </td>
+                    <td>{{ $invoice_metadata->owner_email }}</td>
+                    <td colspan="20"></td>
+                    <td class="weight-bold">Invoice Nos: </td>
+                    <td>{{ $invoice_metadata->invoice_nos }}</td>
+                </tr>
+                <tr>
+                    <td class="weight-bold">Phone Number: </td>
+                    <td>{{ $invoice_metadata->owner_phone }}</td>
+                    <td colspan="20"></td>
+                    
+                    <td class="weight-bold">Created At: </td>
+                    <td>{{ $invoice_metadata->created_at }}</td>
+                </tr>
+                <tr>
+                    <td class="weight-bold">Engine Number: </td>
+                    <td>{{ $invoice_metadata->engine_number ?? "" }}</td>
+                     <td colspan="20"></td>
+                    <td class="weight-bold">Generated By: </td>
+                    <td>{{ $invoice_metadata->first_name ." ".$invoice_metadata->surname }}</td>
+                </tr>
+                <tr>
+                    <td class="weight-bold">License Number: </td>
+                    <td>{{ $invoice_metadata->owner_license_number ?? "" }}</td>
+                    <td colspan="20"></td>
+                    
+                    <td class="weight-bold">Plate Number: </td>
+                    <td>{{ $invoice_metadata->plate_number ?? "" }}</td>
+                </tr>
+                <tr>
+                    <td class="weight-bold">Chassis Number: </td>
+                    <td>{{ $invoice_metadata->chassis_number ?? "" }}</td>
+                    <!-- <td colspan="7"></td> -->
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="invoice-body" style="margin-top:15px;">
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th colspan="15">Service</th>
+                    <th>Transaction Ref.</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
                 
-                <div style="background:white" class="col text"></div>
-            </div>
-
-            <div class="col-container mb-3">
-
-                <div class="col">
-                    <div class=" mb-3">
-                        <strong> Vehicle Information:</strong>
-                    </div>
-                    <p class="mb-2"><span class="info-head">Owner's Name</span>: {{ $invoice->owner_fname . " ". $invoice->owner_surname }}</p>
-                    <p class="mb-2"><span class="info-head">Owner's Email</span>: {{ $invoice->owner_email ?? "" }}</p>
-                    <p class="mb-2"><span class="info-head">Phone Number</span>: {{ $invoice->owner_phone }}</p>
-                    <p class="mb-2"><span class="info-head">Engine Number</span>: {{ $invoice->engine_number ?? "" }}</p>
-                    <p class="mb-2"><span class="info-head">License Number</span>: {{ $invoice->owner_license_number ?? "" }}</p>
-                    <p class="mb-2"><span class="info-head">Chassis Number</span>: {{ $invoice->chassis_number ?? "" }}</p>
-                </div>
-
-                <div style="background:white" class="col"></div>
-                <div style="background:white" class="col"></div>
-
-                <div style="background:white" class="col text">
-                    <p class="mb-2"><span class="info-head">From</span>: Imo State Government, Nigeria</p>
-                    <p class="mb-2"><span class="info-head">{{  $invoice->status === "unpaid"? "Invoice Nos":"Receipt Nos"}}</span>: {{ $invoice->invoice_nos }}</p>
-                    <p class="mb-2"><span class="info-head">Created At</span>: {{ $invoice->created_at }}</p>
-                    @if (!is_null($invoice->updated_at)))
-                        <p class="mb-2"><span class="info-head">Paid At</span>: {{ $invoice->updated_at }}</p>
-                    @endif
-                    <p class="mb-2"><span class="info-head">Transaction Ref. </span>: {{ $invoice->trans_ref }}</p>
-                    <p class="mb-2"><span class="info-head">Status</span>: {{ Str::ucfirst($invoice->status) }}</p>
-                    <p class="mb-2"><span class="info-head">Service</span>: {{ $invoice->service_name }}</p>
-                    <p class="mb-2"><span class="info-head">Generated By</span>: {{ $invoice->first_name ." ".$invoice->surname }}</p>
-                  
-                </div>
-            </div>
-
-            <div class="col-container">
-                <div class="col">
-                    <table>
-                        <thead>
-                            <tr>
-                                <td>S/N</td>
-                                <td>Description</td>
-                                <td>Amount (<del style="text-decoration-style: double;">N</del>)
-                                </td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            @foreach ( $invoice_breakdown as $breakdown )
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $breakdown->title }}</td>
-                                    <td>{{ $breakdown->amount }}</td>
-                                </tr>
-                            @endforeach
-                            
-                            <tr class="total">
-                                <td colspan="2">Sub-total</td>
-                                <td> <del style="text-decoration-style: double;">N</del> {{ $invoice->amount }}</td>
-                            </tr>
-                            <tr class="total">
-                                <td colspan="2">Grand Total</td>
-                                <td> <del style="text-decoration-style: double;">N</del> {{ $invoice->amount }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-               
-            </div>
-
+                @foreach ( $invoices as  $invoice)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td colspan="15" class="weight-bold">{{ $invoice->service_name }}</td>
+                        <td class="weight-bold"  style="background:transparent;">{{ $invoice->trans_ref }}</td>
+                        <td><del style="text-decoration-style: double;">N</del>{{ $invoice->amount }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="16">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td class="weight-bold">S/N</td>
+                                        <td class="weight-bold">Description</td>
+                                        <td class="weight-bold">Cost</td>
+                                    </tr>
+                                </thead>
+                               <tbody>
+                                   @forelse ($invoice_details as $detail)
+                                    @if ($detail->invoice_id === $invoice->id)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $detail->title }}</td>
+                                            <td><del style="text-decoration-style: double;">N</del>{{ $detail->amount }}</td>
+                                        </tr>
+                                    @endif
+                                   @empty
+                                       <tr>
+                                           <td colspan="3">No service component</td>
+                                       </tr>
+                                   @endforelse
+                               </tbody>
+                            </table>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                @endforeach
+                <tr>
+                    <td></td>
+                    <td colspan="16" style="text-align:right; padding-right:60px; font-weight:bolder">Grand Total:</td>
+                    <td><del style="text-decoration-style: double;">N</del>{{ $invoice_metadata->total_amount }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
  
 </body>

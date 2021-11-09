@@ -53,30 +53,22 @@
                                 <thead>
                                     <tr>
                                         <th>S/N</th>
-                                        <th>Invoice</th>
+                                        <th>Invoice Nos</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($invoices as $invoice)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{  $invoice['service'].' Invoice' }}</td>
-                                            <td>
-                                                <form action="{{ route('invoices.download') }}" method="post">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-primary">Download Invoice</button>
-                                                    <input type="hidden" value="{{ $invoice['invoice_id'] }}" name="invoice"/>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @empty
                                     <tr>
-                                        <td class="text-center" colspan="7"><span class="text-danger text-center">Vehicle types are not added yet</span>
+                                        <td>1</td>
+                                        <td>{{ $invoice }}</td>
+                                        <td>
+                                            <form action="{{ route('invoices.download') }}" method="post">
+                                                @csrf
+                                                <button type="submit" class="btn btn-primary">Download Invoice</button>
+                                                <input type="hidden" value="{{ $invoice }}" name="invoice"/>
+                                            </form>
                                         </td>
                                     </tr>
-                                    @endforelse
-                                   
                                 </tbody>
                             </table>
                         </div>

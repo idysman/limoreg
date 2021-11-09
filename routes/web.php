@@ -119,9 +119,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/vehicles/store', [VehiclesController::class, "store"])->name("vehicles.store");
 
-    Route::get('/vehicles/{plate}/edit', [VehiclesController::class, "edit"])->name("vehicles.edit");
+    // Functionality can only be accessed by super Admins
+    Route::get('/vehicles/{vehicle}/edit', [VehiclesController::class, "edit"])->name("vehicles.edit")->middleware('is_superAdmin');
 
-    Route::put('/vehicles/{vehicle}', [VehiclesController::class, "update"])->name("vehicles");
+    Route::put('/vehicles/{vehicle}', [VehiclesController::class, "update"])->name("vehicles")->middleware('is_superAdmin');;
 
     Route::get('/vehicles/{vehicle}', [VehiclesController::class, "show"]);
     
