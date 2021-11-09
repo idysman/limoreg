@@ -551,8 +551,14 @@
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
                                         <label for="fuel-type">Fuel Type</label>
-                                        <input type="text"  value="{{ old("fuel_type") }}" name="fuel_type" class="form-control @error('fuel_type') is-invalid @enderror" id="fuel-type" placeholder="Fuel Type" required>
-
+                                        <select name="fuel_type" class="form-control @error('fuel_type') is-invalid @enderror" id="fuel-type" required>
+                                            <option value="">Select Fuel type</option>
+                                            <option value="gasoline">Gasoline</option>
+                                            <option value="diesel">Diesel Fuel</option>
+                                            <option value="bio-diesel">Bio-Diesel</option>
+                                            <option value="ethanol"> Ethanol</option>
+                                        </select>
+                                        
                                         @error('fuel_type')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -563,8 +569,12 @@
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
                                         <label for="odometer">Odometer</label>
-                                        <input type="text"  value="{{ old("odometer") }}" name="odometer" class="form-control @error('odometer') is-invalid @enderror" id="odometer" placeholder="Odometer" required>
-
+                                        
+                                        <select name="fuel_type" name="odometer" class="form-control @error('odometer') is-invalid @enderror" id="odometer" placeholder="Odometer" required>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                        
                                         @error('odometer')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
