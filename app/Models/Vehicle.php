@@ -11,33 +11,24 @@ class Vehicle extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        
-        'owner_fname' ,
-        'owner_surname' ,
-        'owner_email',
-        'owner_license_number',
-        'owner_phone',
         'engine_number',
         'chassis_number',
         'plate_number',
         'model',
         'category',
+        'owner_id',
+        'title',
         'vehicle_type_id',
         'policy_number',
         'engine_capacity',
         'tank_capacity',
         'odometer',
         'created_by',
+        "trans_ref",
         'color',
         'fuel_type',
         'year_of_manufacture',
-        'title',
-        'address',
-        'owner_identification',
-        'identification_no',
-        'state',
         'iirs_id',
         'tin',
-        'lga'
     ];
 }

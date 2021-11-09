@@ -14,7 +14,7 @@ try {
         ======================================
     */
 
-    
+
     // Total Visits
 
     var spark1 = {
@@ -211,7 +211,7 @@ try {
         }
         ]
     }
-    
+
 
     /*
         ===================================
@@ -240,7 +240,7 @@ try {
           bar: {
               horizontal: false,
               columnWidth: '55%',
-              endingShape: 'rounded'  
+              endingShape: 'rounded'
           },
       },
       dataLabels: {
@@ -266,7 +266,7 @@ try {
       },
       series: [{
           name: 'Your Invoices',
-          data: [58, 44, 55, 57, 56, 61, 58, 63, 60, 66, 56, 63]
+          data
       }, {
           name: 'Total Invoices',
           data: [91, 76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 70]
@@ -430,7 +430,7 @@ try {
       },
     }
 
-    
+
 
 
     /*

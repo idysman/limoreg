@@ -49,7 +49,7 @@
                                 <thead>
                                     <tr>
                                         <th>S/N</th>
-                                        <th>Plate Number</th>
+                                        <th>Chassis Number</th>
                                         <th>Model</th>
                                         <th>Owner Name</th>
                                         <th>Owner Phone</th>
@@ -61,7 +61,7 @@
                                     @forelse ($vehicles as $vehicle)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $vehicle->plate_number }}</td>
+                                            <td>{{ $vehicle->chassis_number }}</td>
                                             <td>{{ $vehicle->model }}</td>
                                             <td>{{ $vehicle->owner_fname . " ".$vehicle->owner_surname }}</td>
                                             <td>{{ $vehicle->owner_phone }}</td>
@@ -82,9 +82,9 @@
                                                                 @csrf
                                                                 @method("DELETE")
                                                                 <input class="form-item" class="dropdown-item" value="Delete" type="submit"/>
-                                                            </form> 
+                                                            </form>
                                                         @endif
-                                                      
+
                                                     </div>
                                                 </div>
                                             </td>

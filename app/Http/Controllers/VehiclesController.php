@@ -6,7 +6,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleType;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreVehicleRequest;
-
+use App\Models\Owner;
 
 class VehiclesController extends Controller
 {
@@ -42,13 +42,25 @@ class VehiclesController extends Controller
     public function store(StoreVehicleRequest $request)
     {
         //    validated input
-        $vehicle = $request->except(['vehicle_type', '_token']);
+        // $vehicle = $request->except(['vehicle_type', '_token']);
 
-        $vehicle["vehicle_type_id"] = $request->vehicle_type;
 
-        $vehicle["created_by"] = auth()->user()->id;
 
-        $vehicle = Vehicle::create($vehicle);
+        $owner_fields = array_intersect(array_keys($request->all()), app(Owner::class)->getFillable());
+        $owner_data = $request->only($owner_fields);
+        $owner = Owner::create($owner_data);
+
+        $vehicle_fields = array_intersect(array_keys($request->all()), app(Vehicle::class)->getFillable());
+        $vehicle_data = $request->only($vehicle_fields);
+        $vehicle_data["vehicle_type_id"] = $request->vehicle_type;
+
+        $vehicle_data["created_by"] = auth()->user()->id;
+        $vehicle_data["owner_id"] = $owner->id;
+
+
+
+
+       $vehicle =  Vehicle::create($vehicle_data);
 
         return back()->with(['success'=>'Vehicle registered successfully. Click the button below to generate invoice for the vehicle', 'link'=> route('invoice.generate', $vehicle->id), 'link_text'=> 'Proceed to Invoice generation']);
     }
@@ -62,8 +74,9 @@ class VehiclesController extends Controller
     public function show($id)
     {
         $vehicle_data = Vehicle::where('id', $id)->first();
+        $owner_data = Owner::where('id',$vehicle_data->owner_id)->first();
 
-        return view('showVehicle',['vehicle' => $vehicle_data]);
+        return view('showVehicle',['vehicle' => $vehicle_data, 'owner' => $owner_data]);
     }
 
     /**
@@ -76,10 +89,13 @@ class VehiclesController extends Controller
     {
         $vehicle_types = VehicleType::all();
         $vehicle_data = Vehicle::where('id',$vehicle)->first();
+        $owner_data = Owner::where('id',$vehicle_data->owner_id)->first();
+
 
         return view('editVehicle', [
             'vehicle' => $vehicle_data,
-            'vehicle_types' => $vehicle_types
+            'vehicle_types' => $vehicle_types,
+            'owner' => $owner_data
         ]);
     }
 
@@ -90,13 +106,23 @@ class VehiclesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreVehicleRequest $request, $id)
+    public function update(StoreVehicleRequest $request, $vehicle_id)
     {
 
+        // $vehicle_fields = array_intersect(array_keys($request->all()), app(Vehicle::class)->getFillable());
+        // $vehicle_data = $request->only($vehicle_fields);
+
+        // Vehicle::where('id',$id)->update($vehicle_data);
         $vehicle_fields = array_intersect(array_keys($request->all()), app(Vehicle::class)->getFillable());
         $vehicle_data = $request->only($vehicle_fields);
 
-        Vehicle::where('id',$id)->update($vehicle_data);
+        Vehicle::where('id',$vehicle_id)->update($vehicle_data);
+
+        $owner_id = Vehicle::where('id',$vehicle_id)->first()->owner_id;
+
+        $owner_fields = array_intersect(array_keys($request->all()), app(Owner::class)->getFillable());
+        $owner_data = $request->only($owner_fields);
+        Owner::where('id',$owner_id)->update($owner_data);
 
         return back()->with('success', 'Vehicle updated successfully');
 
@@ -138,7 +164,7 @@ class VehiclesController extends Controller
         }
 
         return back()->with('error', 'Vehicle credentials does not exists in the system. Kindly register vehicle');
-        
+
     }
 
 }

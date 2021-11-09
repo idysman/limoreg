@@ -23,9 +23,9 @@
             width:100%;
             display:block;
             padding-left:8px
-           
+
         }
-                                                        
+
     </style>
 @endsection
 
@@ -39,7 +39,7 @@
                     <h3>Manage Services</h3>
                 </div>
             </div>
-            
+
             <div class="row layout-top-spacing" id="cancel-row">
                 <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                     <div class="widget-content widget-content-area br-6">
@@ -75,14 +75,14 @@
                                                     </button>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
                                                     <a class="dropdown-item" href="{{ route('services.edit', $service) }}">Edit</a>
-                                                    <a class="dropdown-item" href="#">View</a>
-                                                        
+                                                    <a class="dropdown-item" href="{{ route('services_comp.all',$service->id) }}">View Components</a>
+
                                                         <form  action="{{ route("services", $service) }}" method="POST">
                                                             @csrf
                                                             @method("DELETE")
                                                             <input class="form-item" class="dropdown-item" value="Delete" type="submit"/>
                                                         </form>
-                                                   
+
                                                     </div>
                                                 </div>
                                             </td>
@@ -122,7 +122,7 @@
                                         <div class="form-group mb-4">
                                             <label for="service-name">Service Name</label>
                                             <input type="text" name="service_name" class="form-control @error('service_name') is-invalid @enderror " value="{{ old("service_name") }}" id="service-name" placeholder="Service Name" required>
-                                                
+
                                             @error('service_name')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -132,7 +132,7 @@
                                         <div class="form-group mb-4">
                                             <label for="service-name">Service item code</label>
                                             <input type="text" name="item_code" class="form-control @error('item_code') is-invalid @enderror" value="{{ old("item_code") }}" id="item-code" placeholder="Item code" required>
-                                                
+
                                             @error('item_code')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -145,14 +145,14 @@
                                                 {{ old("description") }}
                                             </textarea>
                                             <small>An optional service description.</small>
-        
+
                                             @error('description')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                             @enderror
                                         </div>
-                                  
+
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Cancel</button>
@@ -163,7 +163,7 @@
                         </div>
                     </div>
             </div>
-    
+
 @endsection
 
 @section("pageScripts")
@@ -172,10 +172,10 @@
 
     <!-- NOTE TO Use Copy CSV Excel PDF Print Options You Must Include These Files  -->
     <script src="{{ asset("assets/js/datatable/button-ext/dataTables.buttons.min.js") }}"></script>
-    <script src="{{ asset("assets/js/datatable/button-ext/jszip.min.js") }}"></script>    
+    <script src="{{ asset("assets/js/datatable/button-ext/jszip.min.js") }}"></script>
     <script src="{{ asset("assets/js/datatable/button-ext/buttons.html5.min.js") }}"></script>
     <script src="{{ asset("assets/js/datatable/button-ext/buttons.print.min.js")}}"></script>
-    
+
     <script>
         $('#html5-extension').DataTable( {
             dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5"i><"col-md-7"p>>> >',
@@ -196,7 +196,7 @@
             },
             "stripeClasses": [],
             "lengthMenu": [7, 10, 20, 50],
-            "pageLength": 7 
+            "pageLength": 7
         } );
     </script>
     <!-- END PAGE LEVEL SCRIPTS -->
