@@ -266,10 +266,11 @@ try {
       },
       series: [{
           name: 'Your Invoices',
-          data
+          data: your_invoices
       }, {
           name: 'Total Invoices',
-          data: [91, 76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 70]
+          data: total_invoices
+        //   data: [91, 76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 70]
       }],
       xaxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
