@@ -31,4 +31,6 @@ class Vehicle extends Model
         'iirs_id',
         'tin',
     ];
+
+  
 }

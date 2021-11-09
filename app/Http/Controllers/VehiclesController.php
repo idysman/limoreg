@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Owner;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreVehicleRequest;
-use App\Models\Owner;
 
 class VehiclesController extends Controller
 {
@@ -17,7 +18,12 @@ class VehiclesController extends Controller
      */
     public function index()
     {
-        $vehicles = Vehicle::get();
+        // $vehicles = Vehicle::get();
+        
+        $vehicles = DB::table('vehicles as V')
+                        ->join('owners as O', 'O.id','=','V.owner_id')
+                        ->select('V.id','O.owner_fname','O.owner_surname','O.owner_phone','O.owner_email','V.chassis_number','V.model')
+                        ->get();
         return view('vehicles',['vehicles' => $vehicles]);
     }
 
