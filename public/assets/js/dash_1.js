@@ -1,7 +1,4 @@
 try {
-
-    console.log(data);
-
     /*
         ==============================
         |    @Options Charts Script   |
