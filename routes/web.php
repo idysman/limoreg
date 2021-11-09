@@ -85,7 +85,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/services/{service}', [ServicesController::class, "destroy"]);
 
         // Service Components
-        Route::get("/services/components/{service_id?}", [ServicesComponentController::class, 'index'])->name("services_comp.all");
+        Route::get("/services/components", [ServicesComponentController::class, 'index'])->name("services_comp.all");
+
+        Route::get("/services/{service_id}/components", [ServicesComponentController::class, 'index'])->name("service.services_comp");
 
         Route::post('/services/components/store', [ServicesComponentController::class, "store"])->name("services_comp.store");
 
@@ -110,7 +112,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/invoices/{vehicle}/store', [InvoiceController::class, 'store'])->name("invoice.store");
 
-    Route::get("/invoices/show", [InvoiceController::class, "showInvoice"]);
+    Route::get("/invoices/show", [InvoiceController::class, "showInvoice"])->middleware('is_superAdmin');;
 
     // Vehicles
     Route::get('/vehicles', [VehiclesController::class, "index"])->name("vehicles.all");

@@ -38,7 +38,9 @@
                 padding: '2em',
             }).then(function(result) {
                 if (result.value) {
-                  window.location = "{{ session('link') }}" 
+                    @if (session('link'))
+                        window.location = "{{ session('link') }}" 
+                    @endif
                 }
             })
         @endif
@@ -52,26 +54,6 @@
             })
         @endif
 
-
-        // $('.dropdown-item .warning.confirm').on('click', function (e) {
-        //     e.preventDefault();
-        //     swal.fire({
-        //         title: 'Are you sure?',
-        //         text: "You won't be able to revert this!",
-        //         type: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonText: 'Delete',
-        //         padding: '2em'
-        //     }).then(function(result) {
-        //         if (result.value) {
-        //             swal(
-        //             'Deleted!',
-        //             'Your file has been deleted.',
-        //             'success'
-        //             )
-        //         }
-        //     });
-        // })
 
     </script>
 

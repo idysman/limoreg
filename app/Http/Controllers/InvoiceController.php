@@ -52,12 +52,13 @@ class InvoiceController extends Controller
      */
     public function create($vehicleId)
     {
-        $query = Vehicle::where('id', $vehicleId);
+        $query = DB::table('vehicles as V')->where('V.id', $vehicleId);
         
         if($query->exists()){
-            
-            $vehicle = $query->select(['id', 'owner_fname', 'owner_surname','vehicle_type_id', 'chassis_number','owner_license_number', 'plate_number', 'engine_number', 'owner_email', 'owner_phone'])
-            ->first();
+
+            $vehicle = $query->join('owners as O','O.id','=','V.owner_id')
+                        ->select(['V.id', 'O.owner_fname', 'O.owner_surname','V.vehicle_type_id', 'V.chassis_number','O.owner_license_number', 'V.plate_number', 'V.engine_number', 'O.owner_email', 'O.owner_phone'])
+                        ->first();
             
             $vehicle_types = VehicleType::all();
             
@@ -94,12 +95,17 @@ class InvoiceController extends Controller
         // dd(config('REVPRO_STAGING_URL '));
         $link = "https://staging.revenue.ng/api/v1/autoRegInvoice?token=455UI345GNTF95DFJC82BS0995BNF898FHFBHF21213HFHRH2HHD8FBNBDGFSWCVBDJ&userId=54";
         //    Use the plate_number and retrieve the vehicle
-        $query = Vehicle::where("plate_number", $request->plate_number);
+        $query = DB::table('vehicles as V')->where("chassis_number", $request->chassis_number);
 
         if($query->exists()){
            
             if($request->has("service") && count($request->input("service")) > 0){
-                $vehicle = $query->first(); 
+                
+               $vehicle =  $query->join('owners as O','O.id','=','V.owner_id')
+                                    ->select('O.*','V.*')
+                                    ->first();
+                
+                // $vehicle = $query->first(); 
                 
                 $invoiceQueryData = [];  
                 
@@ -107,8 +113,6 @@ class InvoiceController extends Controller
                 
                 $services_comp = [];
                  
-                $invoice_preview = []; 
-
                 $selected_services = $request->service;
                 
                 foreach ($selected_services as $servId) {
@@ -150,8 +154,7 @@ class InvoiceController extends Controller
                    }//end components foreach
 
                 // Prepare invoice records to be inserted
-                   
-                // Use this for testing (@Testing)
+               
                 array_push($invoiceQueryData, [
                     "vehicle_id"=> $vehicle->id, 
                     "amount"=> $comp_amts, 
@@ -294,7 +297,7 @@ class InvoiceController extends Controller
      */
     public function showInvoice()
     {
-        //Only used for testing purpose
+        //Only used data for testing purpose
         // When designing/modiying the invoice
         
         // Dummy data 
@@ -396,7 +399,8 @@ class InvoiceController extends Controller
         if($query->exists()){
             $invoice_metadata = $query->join('vehicles as V', 'V.id','=','I.vehicle_id')
             ->join('users as U','U.id', '=','I.created_by')
-            ->select('V.owner_fname','V.owner_surname','V.owner_email','V.owner_phone','V.engine_number','V.owner_license_number','V.plate_number','I.created_at', 'V.chassis_number','V.owner_phone','U.first_name','U.surname','I.invoice_nos')
+            ->join('owners as O', 'O.id','=','V.owner_id')
+            ->select('O.owner_fname','O.owner_surname','O.owner_email','O.owner_phone','V.engine_number','O.owner_license_number','V.plate_number','I.created_at', 'V.chassis_number','U.first_name','U.surname','I.invoice_nos')
             ->first();
 
             // Calculate total amount

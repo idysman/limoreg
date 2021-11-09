@@ -44,6 +44,9 @@
 
                 <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                     <div class="widget-content widget-content-area br-6">
+                        <div class="d-flex justify-content-end">
+                            <a class="btn btn-primary p-2 mr-4" href="{{ route('vehicles.register') }}">Add New Vehicle</a>
+                       </div>
                         <div class="table-responsive mb-4 mt-4">
                             <table id="html5-extension" class="table table-hover non-hover" style="width:100%">
                                 <thead>

@@ -75,9 +75,13 @@
                                         @endforelse
                                       </select>
                                     </div>
-                                        <button type="submit" class="btn btn-success mb-2">Submit</button>
+                                        <div class="form-row mt-3">
+                                            <div class="content d-flex flex-end">
+                                                <button type="submit" class="btn btn-success mb-2">Submit</button>
 
-                                        <button type="reset" class="btn btn-warning mb-2">Reset</button>
+                                            <button type="reset" class="btn btn-warning mb-2">Reset</button>
+                                            </div>
+                                        </div>
                                 </form>
                         </div>
                     </div>
@@ -89,6 +93,9 @@
             
                 <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                     <div class="widget-content widget-content-area br-6">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-primary p-2 mr-4" data-toggle="modal" data-target="#invoiceModal">Create Invoice</button>
+                       </div>
                         <div class="table-responsive mb-4 mt-4">
                             <table id="html5-extension" class="table table-hover non-hover" style="width:100%">
                                 <thead>

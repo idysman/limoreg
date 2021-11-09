@@ -283,7 +283,7 @@
                         <form method="POST" action="{{ route("vehicles.store") }}" class="px-4">
                             @csrf
                             <div class="tab">
-                            <div><h2 class="fs-title">Owner Information</h2></div>
+                            <div><h2 class="fs-title">Vehicle Owner Information</h2></div>
                             <div class="form-row">
                             <div class="col-sm-4">
                                 <fieldset>

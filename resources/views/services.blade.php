@@ -75,7 +75,7 @@
                                                     </button>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
                                                     <a class="dropdown-item" href="{{ route('services.edit', $service) }}">Edit</a>
-                                                    <a class="dropdown-item" href="{{ route('services_comp.all',$service->id) }}">View Components</a>
+                                                    <a class="dropdown-item" href="{{ route('service.services_comp',$service->id) }}">View Components</a>
 
                                                         <form  action="{{ route("services", $service) }}" method="POST">
                                                             @csrf
