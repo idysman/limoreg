@@ -32,7 +32,7 @@ class VerifyVehicle extends Component
     public function verify_vehicle()
     {
         
-        session()->flash('message', 'Vehicle credentials does not exist in the system, Kindly register vehicle.');
+        session()->flash('message', 'Vehicle credentials is invalid or does not exist in the system, Kindly register vehicle.');
         
         $this->validate([
             "chassis_number"=> "required|string|exists:vehicles,chassis_number",
@@ -48,7 +48,7 @@ class VerifyVehicle extends Component
             // Remove message from session
             session()->forget('message');
             // Navigate to invoice form
-            $vehicleId = $query->value("id");
+            $vehicleId = $query->value("V.id");
             
             return redirect()->route('invoice.generate',  $vehicleId);
         }
