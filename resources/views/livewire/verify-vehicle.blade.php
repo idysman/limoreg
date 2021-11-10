@@ -11,8 +11,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form wire:submit.prevent="verify_vehicle" class="px-4">
+                    <form  class="px-4">
                         @csrf
+                        {{-- wire:submit.prevent="verify_vehicle" --}}
                         
                         <div class="form-group mb-4">
                             <label for="plate-number">Vehicle Chassis Number</label>
@@ -61,7 +62,7 @@
                     @endif
                     <div class="button">
                         <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Cancel</button>
-                        <button type="submit" class="btn btn-primary">Proceed</button>
+                        <button type="submit" wire:click.prevent="verify_vehicle()" class="btn btn-primary">Proceed</button>
                    </div>
                   
                 </div>
