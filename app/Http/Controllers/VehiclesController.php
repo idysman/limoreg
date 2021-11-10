@@ -19,7 +19,6 @@ class VehiclesController extends Controller
     public function index()
     {
         // $vehicles = Vehicle::get();
-        
         $vehicles = DB::table('vehicles as V')
                         ->join('owners as O', 'O.id','=','V.owner_id')
                         ->select('V.id','O.owner_fname','O.owner_surname','O.owner_phone','O.owner_email','V.chassis_number','V.model')

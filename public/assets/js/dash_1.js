@@ -1,5 +1,4 @@
 try {
-
     /*
         ==============================
         |    @Options Charts Script   |

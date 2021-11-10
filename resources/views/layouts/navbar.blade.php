@@ -2,9 +2,9 @@
   <div class="header-container fixed-top">
     <header class="header navbar navbar-expand-sm">
         <ul class="navbar-item flex-row">
-            <li class="nav-item theme-logo">
-                <a href="index.html">
-                    <img src="{{asset("assets/img/90x90.jpg")}}" class="navbar-logo" alt="logo">
+            <li class="nav-item ">
+                <a href="{{ route('home') }}">
+                    <img src="{{asset("assets/img/logo.png")}}" style="width:205px"  class="navbar-logo mr-3" alt="logo">
                 </a>
             </li>
         </ul>
@@ -24,12 +24,12 @@
         <ul class="navbar-item flex-row navbar-dropdown">
             <li class="nav-item dropdown user-profile-dropdown  order-lg-0 order-1">
                 <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="{{ asset("assets/img/90x90.jpg") }}" alt="admin-profile" class="img-fluid">
+                    <img src="{{ asset("assets/img/profile.png") }}" alt="admin-profile" class="img-fluid">
                 </a>
                 <div class="dropdown-menu position-absolute animated fadeInUp" aria-labelledby="userProfileDropdown">
                     <div class="user-profile-section">
                         <div class="media mx-auto">
-                            <img src="{{ asset("assets/img/90x90.jpg") }}" class="img-fluid mr-2" alt="avatar">
+                            <img src="{{ asset("assets/img/profile.png") }}" class="img-fluid mr-2" alt="avatar">
                             <div class="media-body">
                                 <h5>{{ ucfirst(auth()->user()->first_name." ". auth()->user()->surname )}}</h5>
                                 <p>{{ auth()->user()->role === 1 ? "Super Admin": (auth()->user()->role === 2 ? "Agent": "Inspector") }}</p>

@@ -150,7 +150,11 @@
         const  your_invoices= {{ json_encode($your_invoices) }};
 
 
+<<<<<<< HEAD
         // console.log(your_invoices);
+=======
+        // console.log(data);
+>>>>>>> 53fc097e85e2b6507f13aecb98c17c723784ef2c
 
     </script>
     <script src="{{ asset("assets/js/dash_1.js") }}"></script>

@@ -3,7 +3,7 @@
 
     <nav id="compactSidebar">
         <ul class="menu-categories">
-            <li class="menu active">
+            <li class="menu {{ request()->is('home') ? "active":"" }}">
                 <a href="#dashboard" data-active="true" class="menu-toggle">
                     <div class="base-menu">
                         <div class="base-icons">
@@ -17,7 +17,7 @@
 
             @if (auth()->user()->role === 1)
                 
-                <li class="menu">
+                <li class="menu {{ request()->is('users') || request()->is('users/create') ? "active":""  }}">
                     <a href="#users" data-active="false" class="menu-toggle">
                         <div class="base-menu">
                             <div class="base-icons">
@@ -29,7 +29,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </li>
 
-                <li class="menu">
+                <li class="menu {{ request()->is('services') ||  request()->is('services/components') ? "active":"" }}">
                     <a href="#services" data-active="false" class="menu-toggle">
                         <div class="base-menu">
                             <div class="base-icons">
@@ -42,7 +42,7 @@
                 </li>
             @endif
 
-            <li class="menu">
+            <li class="menu {{ request()->is('vehicles') || request()->is('vehicles/register') || request()->is('vehicle_types') ? "active":"" }}">
                 <a href="#vehicles" data-active="false" class="menu-toggle">
                     <div class="base-menu">
                         <div class="base-icons">
@@ -55,7 +55,7 @@
             </li>
 
 
-            <li class="menu">
+            <li class="menu {{ request()->is('invoices/*') ? "active":"" }}">
                 <a href="#invoices" data-active="false" class="menu-toggle">
                     <div class="base-menu">
                         <div class="base-icons">
@@ -89,7 +89,7 @@
 
         <div class="submenu" id="dashboard">
             <ul class="submenu-list" data-parent-element="#dashboard">
-                <li class="active">
+                <li class="{{ request()->is('home') ? "active":"" }}">
                     <a href="{{ route("home") }}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pie-chart"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg> Home </a>
                 </li>
             </ul>
@@ -98,11 +98,11 @@
         @if (auth()->user()->role === 1)
             <div class="submenu" id="users">
                 <ul class="submenu-list" data-parent-element="#users">
-                    <li>
-                        <a href="{{ route("users.create") }}"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"  class="feather feather-message-square" stroke-linejoin="round"><path d="M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6"/><path d="M14 3v5h5M18 21v-6M15 18h6"/></svg>New User</a>
+                    <li class="{{ request()->is('users/create') ? "active":"" }}">
+                        <a href="{{ route("users.create") }}" > <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"  class="feather feather-message-square" stroke-linejoin="round"><path d="M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6"/><path d="M14 3v5h5M18 21v-6M15 18h6"/></svg>New User</a>
 
                     </li>
-                    <li>
+                    <li class="{{ request()->is('users') ? "active":"" }}">
                         <a href="{{ route("users.all") }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
                             All Users
@@ -114,13 +114,16 @@
             
             <div class="submenu" id="services">
                 <ul class="submenu-list" data-parent-element="#services">
-                    <li>
+                    <li class="{{ request()->is('services') ? "active":"" }}">
                         <a href="{{ route("services.all") }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
                             Manage Services
                         </a>
-
-                        <a href="{{ route("services_comp.all") }}">
+                      
+                       
+                    </li>
+                    <li class="{{ request()->is('services/components') ? "active":"" }}">
+                        <a  href="{{ route("services_comp.all") }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
                             Service Components
                         </a>
@@ -131,20 +134,20 @@
 
         <div class="submenu" id="vehicles">
             <ul class="submenu-list" data-parent-element="#vehicles">
-                <li>
+                <li class="{{ request()->is('vehicles') ? "active":""}}">
                     <a href="{{ route("vehicles.all") }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
                        All Vehicles
                     </a>
                 </li>
-
-                <li>
+                
+                <li class="{{ request()->is('vehicles/register') ? "active":""  }}">
                     <a href="{{ route("vehicles.register") }}"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"  class="feather feather-message-square" stroke-linejoin="round"><path d="M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6"/><path d="M14 3v5h5M18 21v-6M15 18h6"/></svg>Register Vehicles</a>
 
                  </li>
 
                  @if (auth()->user()->role === 1)
-                    <li>
+                    <li class="{{ request()->is('vehicle_types') ? "active":""  }}">
                         <a href="{{ route("vehicleTypes.all") }}"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"  class="feather feather-message-square" stroke-linejoin="round"><path d="M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6"/><path d="M14 3v5h5M18 21v-6M15 18h6"/></svg>Vehicles Types</a>
 
                     </li>
@@ -154,16 +157,17 @@
 
         <div class="submenu" id="invoices">
             <ul class="submenu-list" data-parent-element="#invoices">
-                <li>
+                <li onclick="toogleState()" id="createInvoice" >
                     <a href="#" data-toggle="modal" data-target="#invoiceModal">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                         Create Invoice
                     </a>
+                </li>
+                <li class="{{ request()->is('invoices/all') ? "active":"" }}">
                     <a href="{{ route('invoices.all') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
                         Manage Invoices
                     </a>
-                   
                 </li>
             </ul>
         </div>
@@ -175,7 +179,6 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
                         Logout
                     </a>
-
                    
                 </li>
             </ul>

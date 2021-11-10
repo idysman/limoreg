@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Vehicle;
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 
 class VerifyVehicle extends Component
 
@@ -21,7 +21,7 @@ class VerifyVehicle extends Component
 
         $this->validateOnly($field, [
             "chassis_number"=> "required|string|exists:vehicles,chassis_number",
-            "phone_number" => "required|string|exists:vehicles,owner_phone",
+            "phone_number" => "required|string|exists:owners,owner_phone",
             "plate_number"=> "required|string|exists:vehicles,plate_number"
         ]);
 
@@ -36,14 +36,14 @@ class VerifyVehicle extends Component
         
         $this->validate([
             "chassis_number"=> "required|string|exists:vehicles,chassis_number",
-            "phone_number" => "required|string|exists:vehicles,owner_phone",
+            "phone_number" => "required|string|exists:owners,owner_phone",
             "plate_number"=> "required|string|exists:vehicles,plate_number"
         ]);
-
         //  Double check credentials existence again
-        $query = Vehicle::where("plate_number", $this->plate_number)
-                        ->where('owner_phone', $this->phone_number)
-                        ->where('chassis_number', $this->chassis_number);
+        $query = DB::table('vehicles as V')->where("V.plate_number", $this->plate_number)
+                ->join('owners as O', 'O.id','=','V.owner_id')
+                ->where('O.owner_phone', $this->phone_number)
+                ->where('V.chassis_number', $this->chassis_number);
         if($query->exists()){
             // Remove message from session
             session()->forget('message');

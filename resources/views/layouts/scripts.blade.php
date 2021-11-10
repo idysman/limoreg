@@ -54,6 +54,11 @@
             })
         @endif
 
+        function toogleState(evt){
+            const el = document.getElementById('createInvoice');
+            el.classList.toggle('active');
+        }
+
 
     </script>
 
