@@ -150,7 +150,7 @@
         const  your_invoices= {{ json_encode($your_invoices) }};
 
 
-        console.log(data);
+        // console.log(your_invoices);
 
     </script>
     <script src="{{ asset("assets/js/dash_1.js") }}"></script>
