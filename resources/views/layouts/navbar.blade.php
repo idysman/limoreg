@@ -4,7 +4,7 @@
         <ul class="navbar-item flex-row">
             <li class="nav-item ">
                 <a href="{{ route('home') }}">
-                    <img src="{{asset("assets/img/logo.png")}}" style="width:205px"  class="navbar-logo mr-3" alt="logo">
+                    <img src="{{ trans('config.LOGO')}}" style="width: {{ trans('config.LOGO_WIDTH') }}"  class="navbar-logo mr-3" alt="logo">
                 </a>
             </li>
         </ul>

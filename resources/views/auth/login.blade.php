@@ -8,10 +8,10 @@
                 <div class="form-container">
                     <div class="form-content">
                         <div class="img mb-3 mt-3">
-                            <img src="{{ asset('assets/img/logo.png') }}" style="width:270px" alt="" sizes="" srcset="">
+                            <img src="{{ trans('config.LOGO') }}" style="width:270px" alt="" sizes="" srcset="">
                         </div>
-                        <h1 class="">Welcome. Sign In</h1>
-                        <p class="">Log in to your account to continue.</p>
+                        <h1 class="">Welcome. Sign In </h1>
+                        <p class="">Log in to your account to con1tinue.</p>
                         
                         <form class="text-left" method="POST"  action="{{ route('login') }}">
                             @csrf
