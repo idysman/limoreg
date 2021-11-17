@@ -415,7 +415,7 @@ class InvoiceController extends Controller
                 ->join('invoices as I', 'I.id','=','IB.invoice_id')
                 ->join('service_components as S', 'S.id','=','IB.component_id')
                 ->where('I.invoice_nos', $request->invoice)
-                ->select('Ib.invoice_id','S.amount','S.title')
+                ->select('IB.invoice_id','S.amount','S.title')
                 ->get();
 
                 $pdf = App::make('dompdf.wrapper');
