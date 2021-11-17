@@ -21,6 +21,22 @@
     <link href="{{ asset("assets/css/sweetalert.css") }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset("assets/css/custom-sweetalert.css") }}" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
+    <style>
+
+        .btn-primary{
+            border: 1px solid {{ trans('config.BTN_COLOR') }};
+            background: {{ trans("config.BTN_COLOR") }};
+        }
+        .dt-buttons button.dt-button{
+            background: {{ trans("config.BTN_COLOR") }};
+            border: 1px solid {{ trans("config.BTN_COLOR") }};
+        }
+
+        .badge-primary{
+            border: 1px solid {{ trans('config.BTN_COLOR') }};
+            background: {{ trans("config.BTN_COLOR") }};
+        }
+    </style>
 
     @yield("pageStyles")
     

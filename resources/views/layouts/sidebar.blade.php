@@ -1,7 +1,7 @@
    <!--  BEGIN SIDEBAR  -->
    <div class="sidebar-wrapper sidebar-theme">
 
-    <nav id="compactSidebar">
+    <nav id="compactSidebar" style="background: {{ trans('config.PRIMARY_COLOR') }}">
         <ul class="menu-categories">
             <li class="menu {{ request()->is('home') ? "active":"" }}">
                 <a href="#dashboard" data-active="true" class="menu-toggle">

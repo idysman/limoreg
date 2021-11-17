@@ -16,6 +16,15 @@
     <!-- END GLOBAL MANDATORY STYLES -->
     <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/forms/theme-checkbox-radio.css") }}">
     <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/forms/switches.css") }}">
+
+    <style>
+     
+
+        .btn-primary{
+            border: 1px solid {{ trans('config.BTN_COLOR') }};
+            background: {{ trans("config.BTN_COLOR") }};
+        }
+    </style>
 </head>
 <body class="form">
     
