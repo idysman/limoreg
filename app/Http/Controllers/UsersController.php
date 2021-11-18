@@ -41,7 +41,7 @@ class UsersController extends Controller
     {
     //    validated input
         $validated = $request->validated();
-        
+
         User::create([
             'first_name' => $validated['first_name'],
             'surname'=> $validated['surname'],
@@ -89,6 +89,7 @@ class UsersController extends Controller
         return back()->with('success', 'User updated succesfully');
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
@@ -98,13 +99,13 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        
+
         return back()->with("success", "User delete successfully");
     }
 
 
     /**
-     * Deactivate the user 
+     * Deactivate the user
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -120,7 +121,7 @@ class UsersController extends Controller
         $user->save();
         return back()->with("success", "User activated succesfully");
     }
-    
+
     /**
      * Show the profile of a single user.
      *
@@ -128,7 +129,7 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show (){
-       
+
         $user = User::where('id', auth()->user()->id)->select('first_name','surname','middle_name','email','phone', 'role','created_at')->first();
 
        return view('userProfile',compact('user'));

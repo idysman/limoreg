@@ -3,6 +3,7 @@
 
     <nav id="compactSidebar">
         <ul class="menu-categories">
+            @if (auth()->user()->role !== 3)
             <li class="menu {{ request()->is('home') ? "active":"" }}">
                 <a href="#dashboard" data-active="true" class="menu-toggle">
                     <div class="base-menu">
@@ -14,9 +15,11 @@
                 </a>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </li>
+            @endif
+
 
             @if (auth()->user()->role === 1)
-                
+
                 <li class="menu {{ request()->is('users') || request()->is('users/create') ? "active":""  }}">
                     <a href="#users" data-active="false" class="menu-toggle">
                         <div class="base-menu">
@@ -55,6 +58,8 @@
             </li>
 
 
+
+
             <li class="menu {{ request()->is('invoices/*') ? "active":"" }}">
                 <a href="#invoices" data-active="false" class="menu-toggle">
                     <div class="base-menu">
@@ -76,7 +81,7 @@
                         </div>
                         <span>Logout</span>
 
-                       
+
                     </div>
                 </a>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -111,7 +116,7 @@
                 </ul>
             </div>
 
-            
+
             <div class="submenu" id="services">
                 <ul class="submenu-list" data-parent-element="#services">
                     <li class="{{ request()->is('services') ? "active":"" }}">
@@ -119,8 +124,8 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
                             Manage Services
                         </a>
-                      
-                       
+
+
                     </li>
                     <li class="{{ request()->is('services/components') ? "active":"" }}">
                         <a  href="{{ route("services_comp.all") }}">
@@ -140,7 +145,7 @@
                        All Vehicles
                     </a>
                 </li>
-                
+
                 <li class="{{ request()->is('vehicles/register') ? "active":""  }}">
                     <a href="{{ route("vehicles.register") }}"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"  class="feather feather-message-square" stroke-linejoin="round"><path d="M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6"/><path d="M14 3v5h5M18 21v-6M15 18h6"/></svg>Register Vehicles</a>
 
@@ -175,11 +180,12 @@
         <div class="submenu" id="logout">
             <ul class="submenu-list" data-parent-element="#logout">
                 <li>
-                    <a href="{{ route("logout") }}">
+                    <form action="{{ route("logout") }}" method="POST">
+                        @csrf
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
-                        Logout
-                    </a>
-                   
+                        <button type="submit">Logout</button>
+                    </form>
+
                 </li>
             </ul>
         </div>

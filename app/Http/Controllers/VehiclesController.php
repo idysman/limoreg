@@ -19,9 +19,14 @@ class VehiclesController extends Controller
     public function index()
     {
         // $vehicles = Vehicle::get();
+        $user_phone = auth()->user()->phone;
         $vehicles = DB::table('vehicles as V')
                         ->join('owners as O', 'O.id','=','V.owner_id')
+                        ->when(auth()->user()->role === 3, function($query){
+                            return $query->where('O.owner_phone','=',auth()->user()->phone);
+                        })
                         ->select('V.id','O.owner_fname','O.owner_surname','O.owner_phone','O.owner_email','V.chassis_number','V.model')
+
                         ->get();
         return view('vehicles',['vehicles' => $vehicles]);
     }

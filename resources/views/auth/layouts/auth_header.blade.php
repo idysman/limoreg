@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>AutoFLux - Motor Licensing / Vehicle Renewal System</title>   
+    <title>AutoFLux - Motor Licensing / Vehicle Renewal System</title>
     <link rel="icon" type="image/x-icon" href="{{ asset("assets/img/favicon.png") }}"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
@@ -15,6 +15,6 @@
     <!-- END GLOBAL MANDATORY STYLES -->
     <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/forms/theme-checkbox-radio.css") }}">
     <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/forms/switches.css") }}">
+    {!! ReCaptcha::htmlScriptTagJsApi() !!}
 </head>
 <body class="form">
-    

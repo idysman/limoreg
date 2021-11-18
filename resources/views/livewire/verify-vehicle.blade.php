@@ -14,7 +14,7 @@
                     <form  class="px-4">
                         @csrf
                         {{-- wire:submit.prevent="verify_vehicle" --}}
-                        
+
                         <div class="form-group mb-4">
                             <label for="plate-number">Vehicle Chassis Number</label>
                             <input type="text" wire:model.debounce.150ms="chassis_number" class="form-control @error('chassis_number') is-invalid @enderror"  id="chassi-number" placeholder="Vehicle's Chassis Number" required>
@@ -37,7 +37,7 @@
                         <div class="form-group mb-4">
                             <label for="phone-number">Owner's Phone Number</label>
                             <input type="text" wire:model.debounce.150ms="phone_number" class="form-control @error('phone_number') is-invalid @enderror "id="license-number" placeholder="Owner's Phone Number" required>
-                            
+
                             @error('phone_number')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -64,7 +64,6 @@
                         <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Cancel</button>
                         <button type="submit" wire:click.prevent="verify_vehicle()" class="btn btn-primary">Proceed</button>
                    </div>
-                  
                 </div>
             </form>
             </div>

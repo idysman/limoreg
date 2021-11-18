@@ -21,13 +21,17 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-      
+
         $query_data = request()->query();
 
         $invoices = DB::table("invoices as I")
             ->join('vehicles as V', 'I.vehicle_id', '=', 'V.id')
             ->join('services as S', 'I.service_id', '=', 'S.id')
             ->join('users as U', 'I.created_by', '=', 'U.id')
+            ->when(auth()->user()->role === 3, function($query) {
+                return $query->join('owners as O','V.owner_id','=','O.id')
+                ->where('O.owner_phone','=',auth()->user()->phone);
+            })
             ->select('U.first_name','U.surname', 'I.*','S.service_name', 'V.plate_number')
             ->when(isset($query_data["status"]), function ($q) use($query_data){
                 return $q->where('I.status', $query_data["status"]);
@@ -41,7 +45,7 @@ class InvoiceController extends Controller
             ->get();
 
             $users = DB::table('users')->where('id', '>', 1)->where('role', 2)->select('id','first_name','surname')->get();
-        
+
             return view('invoices', compact('invoices', 'users'));
     }
 
@@ -53,25 +57,25 @@ class InvoiceController extends Controller
     public function create($vehicleId)
     {
         $query = DB::table('vehicles as V')->where('V.id', $vehicleId);
-        
+
         if($query->exists()){
 
             $vehicle = $query->join('owners as O','O.id','=','V.owner_id')
                         ->select(['V.id', 'O.owner_fname', 'O.owner_surname','V.vehicle_type_id', 'V.chassis_number','O.owner_license_number', 'V.plate_number', 'V.engine_number', 'O.owner_email', 'O.owner_phone'])
                         ->first();
-            
+
             $vehicle_types = VehicleType::all();
-            
+
             $services = Service::with(['service_component'])
             ->get();
-            
+
             return view("invoiceForm", compact(["vehicle", "vehicle_types","services"]));
         }
-        
-        return back()->with("error", "Error occured during request");
-       
 
-       
+        return back()->with("error", "Error occured during request");
+
+
+
     }
     /**
      * Store a newly created resource in storage.
@@ -98,76 +102,76 @@ class InvoiceController extends Controller
         $query = DB::table('vehicles as V')->where("chassis_number", $request->chassis_number);
 
         if($query->exists()){
-           
+
             if($request->has("service") && count($request->input("service")) > 0){
-                
+
                $vehicle =  $query->join('owners as O','O.id','=','V.owner_id')
                                     ->select('O.*','V.*')
                                     ->first();
-                
-                // $vehicle = $query->first(); 
-                
-                $invoiceQueryData = [];  
-                
-                $payload_services = []; 
-                
+
+                // $vehicle = $query->first();
+
+                $invoiceQueryData = [];
+
+                $payload_services = [];
+
                 $services_comp = [];
-                 
+
                 $selected_services = $request->service;
-                
+
                 foreach ($selected_services as $servId) {
-                    
+
                     $query = Service::where("id",  $servId);
-                    
+
                     if(!$query->exists()){
                         // Service Ids' tampered with.
                         return back()->with("error". "Error occured. Kindly try again");
                     }
-                    
+
                     $service = $query->select('service_name', 'description', 'item_code')->first();
-                    
+
                    if(!$request->has("service_{$servId}") && count($request->input("service_{$servId}")) == 0){
                         return back()->with("error", "Service component not selected");
                    }
-                    
+
                    $selected_components = $request->input("service_{$servId}");
 
                     $comp_amts = 0; //track total service amounts base on each component array;
-                    
+
                     foreach ($selected_components as $cmpId) {
                         $query = ServiceComponent::where("id", $cmpId)->where("service_id",  $servId);
-                        
+
                         if(!$query->exists()){
                             // Component Id's tampered with from the front-end
                             return back()->with("error", "Error occured, please try again");
                         }
 
                         $queryRes = $query->select('amount', 'title')->first();
-                        
+
                         $comp_amts += $queryRes->amount;
                         // prepare invoice breakdown records to be inserted
 
                         // Generate a mapping of service component to the different service Ids
                         // This is will latter help while inserting the different service components as invoice breakdown.
                         $services_comp["{$servId}"][] = ["service_id"=> $servId, "component_id"=> $cmpId];
-                        
+
                    }//end components foreach
 
                 // Prepare invoice records to be inserted
-               
+
                 array_push($invoiceQueryData, [
-                    "vehicle_id"=> $vehicle->id, 
-                    "amount"=> $comp_amts, 
-                    "service_id"=> $servId, 
+                    "vehicle_id"=> $vehicle->id,
+                    "amount"=> $comp_amts,
+                    "service_id"=> $servId,
                     "service_name"=> $service->service_name,
                     "status"=> "unpaid",
                 ]);
 
                 // prepare payload's service data
                 $serviceObj = (object) array(
-                    "name"=> $service->service_name, 
-                    "amount"=> $comp_amts, 
-                    "description"=> $service->description, 
+                    "name"=> $service->service_name,
+                    "amount"=> $comp_amts,
+                    "description"=> $service->description,
                     "item_code"=> $service->item_code
                 );
 
@@ -183,7 +187,7 @@ class InvoiceController extends Controller
                 "phone" => $vehicle->owner_phone,
                 "tin" => $vehicle->tin ?? "", // query here for more info
                 "birs_id"=> $vehicle->iirs_id ?? "", // query here for more info
-                "payment_type"=> "bank", 
+                "payment_type"=> "bank",
                 "service" => $payload_services,
                 "engine_number"=> $vehicle->engine_number ?? "",
                 "chassis_number"=> $vehicle->chassis_number ?? "",
@@ -206,9 +210,9 @@ class InvoiceController extends Controller
                 "lga" => $vehicle->lga,
 
             );
-           
+
             $curl = curl_init();
-            
+
             curl_setopt_array($curl, array(
                 CURLOPT_URL => $link,
                 CURLOPT_RETURNTRANSFER => true,
@@ -219,18 +223,18 @@ class InvoiceController extends Controller
                 CURLOPT_POST => 1,
                 CURLOPT_POSTFIELDS => json_encode($payload),
             ));
-         
+
             $response = curl_exec($curl);
-                 
+
             $err = curl_error($curl);
 
             curl_close($curl);
-         
+
             if ($err) {
                 // there was an error while interacting with Reprov's  API
                 return back()->with("error", "Error occured while initiating request. Please try again later. Check your internet connection.");
             }
-            
+
             $response = json_decode($response);
 
             if($response->status !== "success" || empty($response->invoice_no)){
@@ -253,12 +257,12 @@ class InvoiceController extends Controller
                 $data["created_by"] = auth()->user()->id;
 
                 // Store Items to be rendered on preview page
-                
+
                 // $invoice_preview[] = ["service"=> $data["service_name"]];
 
                 // Service name not relevant while inserting invoice
                 unset($data["service_name"]);
-                
+
                 // Store Invoice
                 $id = DB::table('invoices')->insertGetId($data);
 
@@ -268,21 +272,21 @@ class InvoiceController extends Controller
                     $breakdown["created_at"] = now();
                     return $breakdown;
                 }, $invoice_breakdown);
-                
+
                 // $invoice_preview[$key]["invoice_id"] = $id; //Track invoice Id also. Will be used in the invoice preview page
                 //  Finally, store invoice breakdown
                 DB::table('invoices_breakdown')->insert($invoice_breakdown);
-               
+
             }
 
-            // Flash invoice preview data into sesssion 
+            // Flash invoice preview data into sesssion
             // $request->session()->flash('preview_invoices', $invoice_preview);
-            
+
             $request->session()->flash('preview_invoice', $response->invoice_no);
-            
+
             // Operation is successful, Redirect to invoice preview page to render generated invoices.
             return redirect()->route('invoices.preview');
-        
+
         }
             return back()->with("error". "You have not selected any service.");
         }
@@ -299,8 +303,8 @@ class InvoiceController extends Controller
     {
         //Only used data for testing purpose
         // When designing/modiying the invoice
-        
-        // Dummy data 
+
+        // Dummy data
         $invoice_metadata = (object) array(
             "invoice_nos" => "INVR61842C78BBBD2920",
             "owner_fname" =>"Jenkins",
@@ -336,7 +340,7 @@ class InvoiceController extends Controller
             ),
         ];
 
-        $invoice_details = [ 
+        $invoice_details = [
             (object) array (
                 "amount"=> 450,
                 "title"=> "SMS Alert",
@@ -381,7 +385,7 @@ class InvoiceController extends Controller
         ];
 
         // dd($invoice_breakdown[0]->title);
-        
+
         return view("pdf.invoice", compact('invoices','invoice_metadata','invoice_details'));
     }
 
@@ -393,7 +397,7 @@ class InvoiceController extends Controller
         $request->validate(
             ["invoice" => "required|string"]
         );
-        
+
         $query = DB::table('invoices as I')->where('I.invoice_nos', $request->invoice);
 
         if($query->exists()){
@@ -419,13 +423,13 @@ class InvoiceController extends Controller
                 ->get();
 
                 $pdf = App::make('dompdf.wrapper');
-                
+
                 $pdf->loadView('pdf.invoice', compact('invoice_metadata','invoices','invoice_details'));
                 // $pdf->loadView('pdf.invoice');
-                
+
                 // $filename = $invoice->status === "unpaid" ? "invoice.pdf": "receipt.pdf";
                 $filename =  "invoice{$request->invoice}.pdf";
-                
+
                 return $pdf->download("{$filename}");
         }
         // return back()->with('error', 'Sorry, an error occured. Please try again latter');
@@ -435,22 +439,22 @@ class InvoiceController extends Controller
 
     /**
      * Display Generated invoices
-     *  
-     * */   
+     *
+     * */
     public function preview(){
     //   Check whether  the required parameters are persisted in session
         if(!session("preview_invoice")){
             return back()->with("error", "No invoice is selected. Kindly select an invoice from the invoice page");
       }
-   
+
       $invoice = session("preview_invoice");
-      
+
       return view('invoicePreview', compact('invoice'));
     }
 
     /***
      * Process and render Invoice Breakdown
-     * 
+     *
      */
     public function invoice_breakdown($invoice_id){
 
@@ -461,15 +465,15 @@ class InvoiceController extends Controller
             ->get();
 
         $invoice = DB::table('invoices')->where('id', $invoice_id)->select('amount as total', 'trans_ref','invoice_nos')->first();
-            
-        
+
+
         return view("invoiceBreakdown", compact('components', 'invoice'));
     }
 
     public function invoice_update (Request $request){
 
         $ref = $request->trans_reference;
-        
+
         $status = $request->status;
 
         if($request->has('trans_reference') && $request->has('status') && strtolower($status) === "paid"){
@@ -493,7 +497,7 @@ class InvoiceController extends Controller
                 'status'=> 'error',
                 'message' => 'Invoice transaction reference not found',
             ], 404);
-           
+
         }
         return  response()->json([
             'status'=> "error",
