@@ -10,15 +10,9 @@
                         <div class="img mb-3 mt-3">
                             <img src="{{ trans('config.LOGO') }}" style="width:270px" alt="" sizes="" srcset="">
                         </div>
-<<<<<<< HEAD
-                        <h1 class="">Welcome. Sign In </h1>
-                        <p class="">Log in to your account to con1tinue.</p>
-                        
-=======
                         <h1 class="">Welcome. Sign In</h1>
                         <p class="">Log in to your account to continue.</p>
 
->>>>>>> ac94d75d94a442068766f671f7866db7c95ffba5
                         <form class="text-left" method="POST"  action="{{ route('login') }}">
                             @csrf
                             <div class="form">
