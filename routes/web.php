@@ -9,7 +9,8 @@ use App\Http\Controllers\ServicesComponentController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\VehiclesController;
 use App\Http\Controllers\VehicleTypesController;
-
+use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Support\Facades\Auth;
 
 // use App\Http\Controllers\VehicleTypes
 
@@ -25,20 +26,20 @@ use App\Http\Controllers\VehicleTypesController;
 */
 
 
-Route::get('/login', [LoginController::class, "showLoginForm"])->name('login')->middleware('guest');
+// Route::get('/login', [LoginController::class, "showLoginForm"])->name('login')->middleware('guest');
 
-Route::post('/login', [LoginController::class, "login"])->middleware('guest');
+// Route::post('/login', [LoginController::class, "login"])->middleware('guest');
+
+Auth::routes();
+// Route::get('/register',  [RegisterController::class, "index"])->name('users.register')->middleware('guest');
+// Route::post('/users/new/store', [RegisterController::class, "create"])->name("users.new.store")->middleware('guest');
 
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/register', function(){
-    // Register router  disabled
-    return redirect()->route('login');
-});
 
-Route::get('/logout', [LoginController::class, "logout"])->name('logout')->middleware('auth');
+// Route::get('/logout', [LoginController::class, "logout"])->name('logout')->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -136,7 +137,4 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
-Route::get('/test',function(){
-    return view('test_form');
-});
 

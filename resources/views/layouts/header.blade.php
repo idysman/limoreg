@@ -15,11 +15,12 @@
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset("assets/css/plugins.css") }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset("assets/css/structure.css") }}" rel="stylesheet" type="text/css" class="structure" />
-    
+
     <script src="{{ asset("assets/js/promise-polyfill.js") }}"></script>
     <link href="{{ asset("assets/css/sweetalert2.min.css") }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset("assets/css/sweetalert.css") }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset("assets/css/custom-sweetalert.css") }}" rel="stylesheet" type="text/css" />
+    
     <!-- END GLOBAL MANDATORY STYLES -->
     <style>
 
@@ -39,7 +40,7 @@
     </style>
 
     @yield("pageStyles")
-    
+
     @livewireStyles
 </head>
 <body class="dashboard-analytics">

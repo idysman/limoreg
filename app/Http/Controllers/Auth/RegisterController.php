@@ -48,9 +48,14 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+
+    //  public function index(){
+    //      return view('userRegistration');
+    //  }
+
+     protected function validator(array $data)
     {
-        
+
         return Validator::make($data, [
             'first_name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
@@ -58,9 +63,10 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'string','max:11', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            // 'g-recaptcha-response' => 'recaptcha',
         ]);
 
-       
+
     }
 
     /**
@@ -78,6 +84,10 @@ class RegisterController extends Controller
             'phone'=> $data["phone"],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role' => 3, //3 is the role assigned to end users
+            'email_verified_at' => now()
         ]);
     }
+
+
 }
