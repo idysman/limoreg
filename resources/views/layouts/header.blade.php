@@ -37,6 +37,26 @@
             border: 1px solid {{ trans('config.BTN_COLOR') }};
             background: {{ trans("config.BTN_COLOR") }};
         }
+      
+        .form-item {
+            font-size: 12px;
+            font-weight: 700;
+            color: #888ea8;
+            border:none;
+            background:none;
+            padding-top: 11px;
+            padding-bottom: 11px;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .form-item:hover{
+            background:#f1f2f3;
+            width:100%;
+            display:block;
+            padding-left:8px
+           
+        }
+    
     </style>
 
     @yield("pageStyles")

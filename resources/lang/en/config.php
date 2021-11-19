@@ -3,7 +3,7 @@
     switch (env('CURRENT_PROJECT')) {
         case 'IMO_STATE':
             return [
-                "FAVICON" => asset('"assets/img/imo/favicon.jpg"'),
+                "FAVICON" => asset("assets/img/imo/favicon.jpg"),
                 "LOGO" => asset("assets/img/imo/logo.png"),
                 "PROJECT_NAME" => "Imo State Vehicle Registration and Licensing System",
                 "LOGO_WIDTH"=> "380px",

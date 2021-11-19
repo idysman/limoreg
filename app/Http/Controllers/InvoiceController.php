@@ -103,13 +103,16 @@ class InvoiceController extends Controller
 
         if($query->exists()){
 
-            if($request->has("service") && count($request->input("service")) > 0){
+            if($request->has("service") && is_array($request->input('service'))){
 
+                if(count($request->input("service")) < 1){
+                    // User did not select any service
+                    return back()->with("error", "You have not selected any service.");
+                }
+         
                $vehicle =  $query->join('owners as O','O.id','=','V.owner_id')
                                     ->select('O.*','V.*')
                                     ->first();
-
-                // $vehicle = $query->first();
 
                 $invoiceQueryData = [];
 
@@ -125,12 +128,19 @@ class InvoiceController extends Controller
 
                     if(!$query->exists()){
                         // Service Ids' tampered with.
-                        return back()->with("error". "Error occured. Kindly try again");
+                        return back()->with("error", "Error occured. Kindly try again");
                     }
 
                     $service = $query->select('service_name', 'description', 'item_code')->first();
 
-                   if(!$request->has("service_{$servId}") && count($request->input("service_{$servId}")) == 0){
+                   if(!$request->has("service_{$servId}")){
+                        return back()->with("error", "Service component not selected");
+                   }
+
+                   if(!is_array($request->input("service_{$servId}"))){
+                        return back()->with("error", "Service component not selected");
+
+                   }elseif(count($request->input("service_{$servId}")) == 0){
                         return back()->with("error", "Service component not selected");
                    }
 
@@ -288,10 +298,10 @@ class InvoiceController extends Controller
             return redirect()->route('invoices.preview');
 
         }
-            return back()->with("error". "You have not selected any service.");
+            return back()->with("error", "You have not selected any service.");
         }
 
-        return back()->with("error". "Error occured, Please try again.");
+        return back()->with("error", "Error occured, Please try again.");
     }
     /**
      * Display the specified resource.
