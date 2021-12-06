@@ -26,5 +26,6 @@
         }
     </style>
     {!! ReCaptcha::htmlScriptTagJsApi() !!}
+    {{-- {!! NoCaptcha::renderJs() !!} --}}
 </head>
 <body class="form">

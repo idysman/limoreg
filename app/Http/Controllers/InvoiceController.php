@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reciept;
+use App\Models\RecieptType;
 use App\Models\Service;
 use App\Models\Vehicle;
 use Barryvdh\DomPDF\PDF;
@@ -109,7 +111,7 @@ class InvoiceController extends Controller
                     // User did not select any service
                     return back()->with("error", "You have not selected any service.");
                 }
-         
+
                $vehicle =  $query->join('owners as O','O.id','=','V.owner_id')
                                     ->select('O.*','V.*')
                                     ->first();
@@ -493,10 +495,22 @@ class InvoiceController extends Controller
                 // Update the invoice status
                $query->update(["updated_at" => now(), "status"=> "paid"]);
 
-                $invoice =  DB::table('invoices')->where('trans_ref', $ref)->select('vehicle_id','updated_at')->first();
+                $invoice =  DB::table('invoices')->where('trans_ref', $ref)->select('vehicle_id','updated_at','service_id','id')->first();
                 // Update last renewal date
                 $vehQuery = DB::table('vehicles')->where('id', $invoice->vehicle_id)->update(['last_renewal_date'=> $invoice->updated_at]);
 
+                $reciept_types = RecieptType::where('service_id',$invoice->service_id)->get();
+                foreach($reciept_types as $reciept_type){
+                    if(Reciept::where('invoice_id',$invoice->id)->first() == null){
+                        $reciept = Reciept::create([
+                            'reciept_type_id' => $reciept_type->id,
+                            'expiry_date' => now()->addYears($reciept_type->valid_duration_years),
+                            'invoice_id' => $invoice->id
+                        ]);
+
+                    }
+
+                }
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Invoice updated succesfully',
@@ -514,5 +528,21 @@ class InvoiceController extends Controller
             'message' => 'No transaction reference and corresponding status',
         ], 500);
 
+    }
+
+    public function test_download(){
+        $pdf = App::make('dompdf.wrapper');
+
+        $pdf->loadView('pdf.road-worthiness-certificate');
+        // $pdf->loadView('pdf.invoice');
+
+        // $filename = $invoice->status === "unpaid" ? "invoice.pdf": "receipt.pdf";
+        $filename =  "insurance.pdf";
+
+        return $pdf->download("{$filename}");
+    }
+
+    public function test_update(){
+        return view('test-update');
     }
 }

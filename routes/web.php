@@ -10,6 +10,7 @@ use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\VehiclesController;
 use App\Http\Controllers\VehicleTypesController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\RecieptController;
 use Illuminate\Support\Facades\Auth;
 
 // use App\Http\Controllers\VehicleTypes
@@ -113,8 +114,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/invoices/{vehicle}/store', [InvoiceController::class, 'store'])->name("invoice.store");
 
-    Route::get("/invoices/show", [InvoiceController::class, "showInvoice"])->middleware('is_superAdmin');;
-
     // Vehicles
     Route::get('/vehicles', [VehiclesController::class, "index"])->name("vehicles.all");
 
@@ -134,7 +133,21 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/vehicles/verify', [VehiclesController::class, 'verify_vehicle'])->name('vehicles.verify');
 
+    Route::get('/reciepts/all',[RecieptController::class,'index'])->name('reciepts.all');
+
+    Route::get('/reciepts/{id}/show',[RecieptController::class,'show'])->name('reciepts.show');
+
+    Route::get('/reciepts/{id}/download',[RecieptController::class,'download'])->name('reciepts.download');
+
+
 
 });
 
+Route::get("/invoices/show", [InvoiceController::class, "showInvoice"]);
 
+Route::get('test',[InvoiceController::class,'test_download']);
+
+Route::get("update_invoice/test", [InvoiceController::class, "test_update"])->name('update.test');
+Route::post("invoices/initiate/update_invoice", [InvoiceController::class, "invoice_update"])->name('update');
+
+Route::get('/leetcode',[RecieptController::class,'leetcode']);

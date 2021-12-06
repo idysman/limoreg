@@ -7,6 +7,9 @@
         <div class="form-form-wrap">
             <div class="form-container">
                 <div class="form-content">
+                    <div class="img mb-3 mt-3">
+                        <img src="{{ trans('config.LOGO') }}" style="width:270px" alt="" sizes="" srcset="">
+                    </div>
 
                     <h1 class="">Registration</h1>
                     {{-- <p class="signup-link register">Already have an account? <a href="auth_login_boxed.html">Log in</a></p> --}}
@@ -91,13 +94,30 @@
 
                             </div>
                             <div class="field-wrapper input mb-2">
-                                <label class="col-md-4 col-form-label text-md-right">Laravel Google Recaptcha</label>
+                                {{-- <label class="col-md-4 col-form-label text-md-right">Laravel Google Recaptcha</label> --}}
                                 <div class="col-md-6"> {!! htmlFormSnippet() !!} </div>
                             </div>
+
+                            {{-- <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                                <label class="col-md-4 control-label">Captcha</label>
+                                <div class="col-md-12">
+                                    {!! app('captcha')->display() !!}
+                                    @if ($errors->has('g-recaptcha-response'))
+                                        <span class="help-block text-danger">
+                                            <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div> --}}
 
                             <div class="d-sm-flex justify-content-between">
                                 <div class="field-wrapper">
                                     <button type="submit" class="btn btn-primary" value="">Get Started!</button>
+                                </div>
+                            </div>
+                            <div class="d-sm-flex justify-content-between">
+                                <div class="field-wrapper">
+                                <a href="{{ route('login') }}">already have an account? login</a>
                                 </div>
                             </div>
 
